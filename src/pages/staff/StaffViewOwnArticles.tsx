@@ -15,13 +15,16 @@ import { BiEditAlt } from 'react-icons/bi';
 import AdminArticlesSubHeader from '../../components/staff/admin/AdminArticlesSubHeader';
 import EditorArticlesSubHeader from '../../components/staff/editor/EditorArticlesSubHeader';
 
-const StaffViewOwnArticles = ({ profile }: any) => {
+const StaffViewOwnArticles = () => {
   const [articles, setArticles] = useState<iArticleType[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOption, setSortOption] = useState('date');
   const [currentPage, setCurrentPage] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+
+  const cachedProfile = sessionStorage.getItem('profile');
+  const profile = JSON.parse(cachedProfile || '');
 
   const articlesPerPage = 15;
 
@@ -104,13 +107,6 @@ const StaffViewOwnArticles = ({ profile }: any) => {
       <div className="max-w-8xl mx-auto">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold text-gray-900">My Own Articles</h1>
-          <Link
-            to="/staff/article/new"
-            className="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition shadow-sm"
-          >
-            <FiPlus className="mr-2" />
-            New Article
-          </Link>
         </div>
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg mb-6">
@@ -118,7 +114,7 @@ const StaffViewOwnArticles = ({ profile }: any) => {
           </div>
         )}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 mb-6">
-          {profile.role === 'Admin' ? (
+          {profile?.role === 'Admin' ? (
             <AdminArticlesSubHeader />
           ) : (
             <EditorArticlesSubHeader />

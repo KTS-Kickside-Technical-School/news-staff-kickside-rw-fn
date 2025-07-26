@@ -12,21 +12,21 @@ const AdminArticlesSubHeader = ({}: AdminArticlesSubHeaderProps) => {
           className="flex items-center justify-center gap-2 px-5 py-3 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition duration-200"
         >
           <PiArticleNyTimes className="text-xl" />
-          <span className="font-medium">View Own Articles</span>
+          <span className="font-medium">View all articles</span>
         </Link>
         <Link
           to="/staff/articles/admin-view-own-articles"
           className="flex items-center justify-center gap-2 px-5 py-3 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition duration-200"
         >
           <PiArticleNyTimes className="text-xl" />
-          <span className="font-medium">View Own Articles</span>
+          <span className="font-medium">View own articles</span>
         </Link>
         <Link
           to="/staff/articles/edit-requests"
           className="flex items-center justify-center gap-2 px-5 py-3 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition duration-200"
         >
           <FiEdit className="text-xl" />
-          <span className="font-medium">Edit Requests</span>
+          <span className="font-medium">Edit requests</span>
         </Link>
       </div>
     </div>

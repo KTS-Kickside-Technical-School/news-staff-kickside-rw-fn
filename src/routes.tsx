@@ -116,7 +116,7 @@ const AppRouter = () => {
               />
               <Route
                 path="articles/admin-view-own-articles"
-                element={<StaffViewOwnArticles profile={profile} />}
+                element={<StaffViewOwnArticles />}
               />
 
               <Route path="settings" element={<Settings />} />
