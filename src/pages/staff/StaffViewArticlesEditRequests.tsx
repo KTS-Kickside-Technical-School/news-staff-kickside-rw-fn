@@ -1,5 +1,3 @@
-import { Link } from 'react-router-dom';
-import { FiPlus } from 'react-icons/fi';
 import { ToastContainer } from 'react-toastify';
 import ArticleEditRequests from '../../pages/staff/ArticleEditRequests';
 import SEO from '../../utils/SEO';
@@ -32,3 +30,4 @@ const StaffViewArticlesEditRequests = ({ profile }: any) => {
 };
 
 export default StaffViewArticlesEditRequests;
+ 
