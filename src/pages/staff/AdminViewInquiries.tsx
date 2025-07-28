@@ -6,11 +6,11 @@ import { toast, ToastContainer } from 'react-toastify';
 import ReactPaginate from 'react-paginate';
 import { formatDateTime } from '../../utils/helpers/articleHelpers';
 import SEO from '../../utils/SEO';
-import { Author } from '../../utils/types/User';
+import { iAuthor } from '../../utils/types/User';
 import { adminViewInquiries } from '../../utils/requests/inquiryRequest';
 
 const AdminViewInquiries = ({ profile }: { profile: any }) => {
-  const [inquiries, setInquiries] = useState<Author[]>([]);
+  const [inquiries, setInquiries] = useState<iAuthor[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOption, setSortOption] = useState('date');
   const [currentPage, setCurrentPage] = useState(0);

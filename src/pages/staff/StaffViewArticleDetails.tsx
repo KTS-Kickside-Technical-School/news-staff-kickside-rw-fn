@@ -23,7 +23,7 @@ const StaffViewArticleDetails = ({ profile }: any) => {
 
   const fetchSingleArticle = async () => {
     try {
-      const response = await staffGetSingleArticle(id);
+      const response = await staffGetSingleArticle(id || '');
 
       if (response?.data?.article) {
         setArticle(response.data.article);
@@ -48,7 +48,7 @@ const StaffViewArticleDetails = ({ profile }: any) => {
   const toggleArticlePublish = async () => {
     setIsLoading(true);
     try {
-      const response = await staffToggleArticlePublish(id);
+      const response = await staffToggleArticlePublish(id || '');
       if (response.status === 200) {
         toast.success('Article status updated successfully!');
         setArticle(response.data.article);
@@ -66,7 +66,7 @@ const StaffViewArticleDetails = ({ profile }: any) => {
   const deleteArticle = async () => {
     setIsLoading(true);
     try {
-      const response = await staffDeleteArticle(id);
+      const response = await staffDeleteArticle(id || '');
       if (response.status === 200) {
         toast.success('Article deleted successfully!');
         navigate('/staff/articles');

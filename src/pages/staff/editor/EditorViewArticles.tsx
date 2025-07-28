@@ -13,7 +13,7 @@ import {
 import SEO from '../../../utils/SEO';
 import { iArticleType } from '../../../utils/types/Article';
 import { formatDateTime } from '../../../utils/helpers/articleHelpers';
-import EditorArticlesSubHeader from '../../../components/staff/editor/EditorArticlesSubHeader';
+import EditorArticlesSubHeader from '../../../component/staff/editor/EditorArticlesSubHeader';
 
 const EditorViewArticles = () => {
   const [articles, setArticles] = useState<iArticleType[]>([]);

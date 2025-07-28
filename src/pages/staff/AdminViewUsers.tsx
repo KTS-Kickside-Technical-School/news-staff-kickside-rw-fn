@@ -7,10 +7,10 @@ import ReactPaginate from 'react-paginate';
 import { formatDateTime } from '../../utils/helpers/articleHelpers';
 import SEO from '../../utils/SEO';
 import { getAllUsers } from '../../utils/requests/usersRequest';
-import { Author } from '../../utils/types/User';
+import { iAuthor } from '../../utils/types/User';
 
 const AdminViewUsers = ({ profile }: { profile: any }) => {
-  const [users, setUsers] = useState<Author[]>([]);
+  const [users, setUsers] = useState<iAuthor[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOption, setSortOption] = useState('date');
   const [currentPage, setCurrentPage] = useState(0);

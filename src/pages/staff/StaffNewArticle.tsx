@@ -4,16 +4,16 @@ import 'react-quill/dist/quill.snow.css';
 import { useDropzone } from 'react-dropzone';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import RichTextEditor from '../../components/staff/RichTextEditor';
+import RichTextEditor from '../../component/staff/RichTextEditor';
 import { uploadImageToCloudinary } from '../../utils/helpers/cloudinary';
 import { publishArticle } from '../../utils/requests/articlesRequest';
 import SEO from '../../utils/SEO';
-import ButtonSpinner from '../../components/ButtonSpinner';
+import ButtonSpinner from '../../component/ButtonSpinner';
 
 const StaffNewArticle = () => {
   const [category, setCategory] = useState('');
   const [title, setTitle] = useState('');
-  const [coverImage, setCoverImage] = useState(null);
+  const [coverImage, setCoverImage] = useState('');
   const [content, setContent] = useState('');
   const [uploadProgress, setUploadProgress] = useState(0);
   const [errors, setErrors] = useState<any>({});
@@ -91,7 +91,7 @@ const StaffNewArticle = () => {
         return;
       }
       toast.success('Article saved successfully!');
-      setCoverImage(null);
+      setCoverImage('');
       setContent('');
       setTitle('');
       setCategory('');

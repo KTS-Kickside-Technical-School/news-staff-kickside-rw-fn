@@ -5,7 +5,7 @@ export const subscribeToNewsLetter = async (email: string) => {
     try {
         const response = await axiosInstance.post('/api/subscribers/user-subcription', { email });
         return response.data;
-    } catch (error: any) {
+    } catch (error) {
         return handleError(error);
     }
 }
@@ -23,7 +23,7 @@ export const getSubscribersList = async () => {
     try {
         const response = await axiosInstance.get('/api/subscribers/get-subscription-list');
         return response.data;
-    } catch (error: any) {
+    } catch (error) {
         return handleError(error);
     }
 }

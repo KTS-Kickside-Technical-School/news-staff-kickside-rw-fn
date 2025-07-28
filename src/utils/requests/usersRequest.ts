@@ -1,4 +1,5 @@
 import axiosInstance from "../axios/axiosInstance"
+import { iAuthor, iUser } from "../types/User";
 import { handleError } from "./articlesRequest"
 
 export const getAllUsers = async () => {
@@ -10,7 +11,7 @@ export const getAllUsers = async () => {
     }
 }
 
-export const getSingleUser = async (id: any) => {
+export const getSingleUser = async (id: string) => {
     try {
         const response = await axiosInstance.get(`/api/workers/get-single-user/${id}`)
         return response.data
@@ -19,7 +20,7 @@ export const getSingleUser = async (id: any) => {
     }
 }
 
-export const updateUser = async (id: any, user: any) => {
+export const updateUser = async (id: string, user: iUser) => {
     try {
         const response = await axiosInstance.put("/api/workers/update-user", {
             _id: id,
@@ -39,7 +40,7 @@ export const updateUser = async (id: any, user: any) => {
     }
 }
 
-export const disableUser = async (id: any, disableReason: any) => {
+export const disableUser = async (id: string, disableReason: string) => {
     try {
         const response = await axiosInstance.put("/api/workers/disable-user", {
             _id: id,
@@ -51,7 +52,7 @@ export const disableUser = async (id: any, disableReason: any) => {
     }
 }
 
-export const enableUser = async (id: any) => {
+export const enableUser = async (id: string) => {
     try {
         const response = await axiosInstance.put(`/api/workers/enable-user/${id}`);
         return response.data
@@ -60,7 +61,7 @@ export const enableUser = async (id: any) => {
     }
 }
 
-export const createNewUser = async (data: any) => {
+export const createNewUser = async (data: iAuthor) => {
     try {
         const response = await axiosInstance.post(`/api/workers/create-user`, data);
         return response.data

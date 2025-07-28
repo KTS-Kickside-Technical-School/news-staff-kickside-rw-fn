@@ -13,7 +13,7 @@ import {
 import SEO from '../../../utils/SEO';
 import { iArticleType } from '../../../utils/types/Article';
 import { formatDateTime } from '../../../utils/helpers/articleHelpers';
-import AdminArticlesSubHeader from '../../../components/staff/admin/AdminArticlesSubHeader';
+import AdminArticlesSubHeader from '../../../component/staff/admin/AdminArticlesSubHeader';
 
 const AdminViewArticles = () => {
   const [articles, setArticles] = useState<iArticleType[]>([]);

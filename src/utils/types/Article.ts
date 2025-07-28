@@ -1,12 +1,12 @@
-import { Author } from "./User";
+import { iAuthor } from "./User";
 
 export interface iArticleType {
-    _id?: any;
+    _id?: string;
     title: string;
     coverImage: string;
     content: string;
     category: string;
-    author: Author;
+    author: iAuthor;
     createdAt: string;
     updatedAt: string;
     status: string;
@@ -15,9 +15,37 @@ export interface iArticleType {
     slug: string;
 }
 
+
+export interface iNewArticle {
+    title: string;
+    coverImage: string;
+    content: string;
+    category: string;
+}
+
+export interface iUpdateArticle {
+    title: string;
+    coverImage: string;
+    content: string;
+    category: string;
+}
+
 export interface MonthlyAnalytics {
     month: string;
     comments: number;
     views: number;
     articles: number;
 }
+
+export interface iArticleEditRequest {
+
+}
+
+export interface iArticleApproveEditRequest {
+
+}
+
+export interface iComment {
+
+}
+

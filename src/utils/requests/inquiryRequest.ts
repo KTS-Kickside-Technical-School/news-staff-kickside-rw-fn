@@ -1,9 +1,10 @@
 import axiosInstance from "../axios/axiosInstance";
+import { iInquiry } from "../types/Inquiry";
 import { handleError } from "./articlesRequest";
 
 
 
-export const sendInquiry = async (data: any) => {
+export const sendInquiry = async (data: iInquiry) => {
     try {
         const response = await axiosInstance.post("/api/inquiry/create-inquiry", {
             topic: data.inquiry,
@@ -27,7 +28,7 @@ export const adminViewInquiries = async () => {
     }
 }
 
-export const adminViewSingleInquiry = async (id: any) => {
+export const adminViewSingleInquiry = async (id: string) => {
     try {
         const response = await axiosInstance.get(`/api/inquiry/get-single-inquiry/${id}`);
         return response.data
@@ -36,7 +37,7 @@ export const adminViewSingleInquiry = async (id: any) => {
     }
 }
 
-export const markInquiryAsRead = async (id: any) => {
+export const markInquiryAsRead = async (id: string) => {
     try {
         const response = await axiosInstance.patch(`/api/inquiry/update-status/${id}`, { status: "solved" });
         return response.data

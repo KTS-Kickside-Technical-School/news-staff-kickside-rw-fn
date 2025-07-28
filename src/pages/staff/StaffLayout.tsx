@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
-import StaffSideBar from "../../components/staff/StaffSideBar";
-import StaffHeader from "../../components/staff/StaffHeader";
+import StaffSideBar from "../../component/staff/StaffSideBar";
+import StaffHeader from "../../component/staff/StaffHeader";
 
 const StaffLayout = ({ onLogout, profile }: any) => {
     return (
