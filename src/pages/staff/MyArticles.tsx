@@ -13,8 +13,8 @@ import ReactPaginate from 'react-paginate';
 import { formatDateTime } from '../../utils/helpers/articleHelpers';
 import SEO from '../../utils/SEO';
 import { BiEditAlt } from 'react-icons/bi';
-import AdminArticlesSubHeader from '../../components/staff/admin/AdminArticlesSubHeader';
-import EditorArticlesSubHeader from '../../components/staff/editor/EditorArticlesSubHeader';
+import AdminArticlesSubHeader from '../../component/staff/admin/AdminArticlesSubHeader';
+import EditorArticlesSubHeader from '../../component/staff/editor/EditorArticlesSubHeader';
 
 const StaffViewArticles = ({ profile }: any) => {
   const [articles, setArticles] = useState<iArticleType[]>([]);

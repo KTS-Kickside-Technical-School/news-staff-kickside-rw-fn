@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Logo from '/logo.svg';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { userResetPassword } from '../../utils/requests/authRequest'; // Adjust the endpoint to handle resetting passwords
-import ButtonSpinner from '../../components/ButtonSpinner';
+import ButtonSpinner from '../../component/ButtonSpinner';
 import SEO from '../../utils/SEO';
 
 const ResetPassword = () => {

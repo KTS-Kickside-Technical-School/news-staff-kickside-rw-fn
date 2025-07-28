@@ -22,7 +22,7 @@ const AdminViewSingleInquiry = () => {
 
   const fetchSingleInquiry = async () => {
     try {
-      const response = await adminViewSingleInquiry(id);
+      const response = await adminViewSingleInquiry(id || '');
       if (response?.data?.inquiry) {
         setInquiry(response.data.inquiry);
       } else {
@@ -39,7 +39,7 @@ const AdminViewSingleInquiry = () => {
   const handleMarkAsRead = async () => {
     setMarkingRead(true);
     try {
-      await markInquiryAsRead(id);
+      await markInquiryAsRead(id || '');
       toast.success('Inquiry marked as read successfully!');
       fetchSingleInquiry();
     } catch (error) {

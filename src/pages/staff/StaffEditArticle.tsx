@@ -4,14 +4,14 @@ import 'react-quill/dist/quill.snow.css';
 import { useDropzone } from 'react-dropzone';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import RichTextEditor from '../../components/staff/RichTextEditor';
+import RichTextEditor from '../../component/staff/RichTextEditor';
 import { uploadImageToCloudinary } from '../../utils/helpers/cloudinary';
 import {
   getSingleArticle,
   updateArticle,
 } from '../../utils/requests/articlesRequest';
 import SEO from '../../utils/SEO';
-import ButtonSpinner from '../../components/ButtonSpinner';
+import ButtonSpinner from '../../component/ButtonSpinner';
 import { useParams } from 'react-router-dom';
 import { iArticleType } from '../../utils/types/Article';
 
@@ -49,7 +49,7 @@ const StaffEditArticle = () => {
   const { slug } = useParams();
   const [category, setCategory] = useState('');
   const [title, setTitle] = useState('');
-  const [coverImage, setCoverImage] = useState(null);
+  const [coverImage, setCoverImage] = useState('');
   const [content, setContent] = useState('');
   const [uploadProgress, setUploadProgress] = useState(0);
   const [errors, setErrors] = useState<any>({});
@@ -144,7 +144,7 @@ const StaffEditArticle = () => {
     }
     setLoading(true);
     try {
-      const response = await updateArticle(article?._id, {
+      const response = await updateArticle(article?._id || '', {
         coverImage,
         content,
         title,

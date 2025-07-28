@@ -1,7 +1,7 @@
 import { useState, useEffect, createContext, useContext } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import StaffLogin from './pages/staff/StaffLogin';
-import AuthGuard from './components/staff/AuthGuard';
+import AuthGuard from './component/staff/AuthGuard';
 import StaffViewArticles from './pages/staff/StaffViewArticles';
 import StaffNotFound from './pages/staff/StaffNotFound';
 import StaffViewArticleDetails from './pages/staff/StaffViewArticleDetails';
@@ -26,7 +26,7 @@ import AdminDashboard from './pages/staff/admin/AdminDashboard';
 import AdminLayout from './pages/staff/admin/AdminLayout';
 import JournalistMyArticles from './pages/staff/journalist/JournalistMyArticles';
 import EditorViewArticles from './pages/staff/editor/EditorViewArticles';
-import RoleProtectedRoute from './components/staff/RoleProtectRoute';
+import RoleProtectedRoute from './component/staff/RoleProtectRoute';
 import AdminNewArticle from './pages/staff/admin/AdminNewArticle';
 import AdminViewArticles from './pages/staff/admin/AdminViewArticles';
 
@@ -34,7 +34,7 @@ const AuthContext = createContext<any>(null);
 
 const AppRouter = () => {
   const isAuthenticated = Boolean(sessionStorage.getItem('token'));
-  const token = sessionStorage.getItem('token');
+  const token = sessionStorage.getItem('token') || '';
   const navigate = useNavigate();
 
   const [profile, setProfile] = useState<any>(null);

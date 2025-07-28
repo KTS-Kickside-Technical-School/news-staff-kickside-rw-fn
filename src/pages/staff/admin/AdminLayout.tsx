@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
-import AdminHeader from '../../../components/staff/admin/AdminHeader';
-import StaffSideBar from '../../../components/staff/StaffSideBar';
+import AdminHeader from '../../../component/staff/admin/AdminHeader';
+import StaffSideBar from '../../../component/staff/StaffSideBar';
 
 const AdminLayout = ({ onLogout }: any) => {
   return (

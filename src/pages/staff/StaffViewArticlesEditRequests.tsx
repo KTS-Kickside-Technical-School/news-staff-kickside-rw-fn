@@ -1,8 +1,8 @@
 import { ToastContainer } from 'react-toastify';
 import ArticleEditRequests from '../../pages/staff/ArticleEditRequests';
 import SEO from '../../utils/SEO';
-import AdminArticlesSubHeader from '../../components/staff/admin/AdminArticlesSubHeader';
-import EditorArticlesSubHeader from '../../components/staff/editor/EditorArticlesSubHeader';
+import AdminArticlesSubHeader from '../../component/staff/admin/AdminArticlesSubHeader';
+import EditorArticlesSubHeader from '../../component/staff/editor/EditorArticlesSubHeader';
 
 const StaffViewArticlesEditRequests = ({ profile }: any) => {
   return (

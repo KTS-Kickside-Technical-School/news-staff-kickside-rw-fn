@@ -7,13 +7,13 @@ import 'react-toastify/dist/ReactToastify.css';
 import { uploadImageToCloudinary } from '../../../utils/helpers/cloudinary';
 import { publishArticle } from '../../../utils/requests/articlesRequest';
 import SEO from '../../../utils/SEO';
-import RichTextEditor from '../../../components/staff/RichTextEditor';
-import ButtonSpinner from '../../../components/ButtonSpinner';
+import RichTextEditor from '../../../component/staff/RichTextEditor';
+import ButtonSpinner from '../../../component/ButtonSpinner';
 
 const AdminNewArticle = () => {
   const [category, setCategory] = useState('');
   const [title, setTitle] = useState('');
-  const [coverImage, setCoverImage] = useState(null);
+  const [coverImage, setCoverImage] = useState('');
   const [content, setContent] = useState('');
   const [uploadProgress, setUploadProgress] = useState(0);
   const [errors, setErrors] = useState<any>({});
@@ -91,7 +91,7 @@ const AdminNewArticle = () => {
         return;
       }
       toast.success('Article saved successfully!');
-      setCoverImage(null);
+      setCoverImage('');
       setContent('');
       setTitle('');
       setCategory('');

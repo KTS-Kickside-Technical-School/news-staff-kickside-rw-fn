@@ -7,7 +7,7 @@ import {
   getSingleUser,
   updateUser,
 } from '../../utils/requests/usersRequest';
-import { Author } from '../../utils/types/User';
+import { iAuthor, iUser } from '../../utils/types/User';
 import { BiCalendar, BiCategory, BiNews, BiTrendingUp } from 'react-icons/bi';
 import { BsBan } from 'react-icons/bs';
 import { MdTurnedInNot, MdOutlineAnalytics } from 'react-icons/md';
@@ -26,12 +26,12 @@ import {
   ArcElement,
 } from 'chart.js';
 import { adminGetJournalistsAnalytics } from '../../utils/requests/articlesRequest';
-import AdminViewPerformanceMetrics from '../../components/admin/users/AdminViewPerformanceMetrics';
-import AdminViewPersonalInformation from '../../components/admin/users/AdminViewPersonalInformation';
-import AdminViewJournalistsArticles from '../../components/admin/users/AdminViewJournalistsArticles';
-import AdminViewJournalistOverview from '../../components/admin/users/AdminViewJournalistOverview';
+import AdminViewPerformanceMetrics from '../../component/admin/users/AdminViewPerformanceMetrics';
+import AdminViewPersonalInformation from '../../component/admin/users/AdminViewPersonalInformation';
+import AdminViewJournalistsArticles from '../../component/admin/users/AdminViewJournalistsArticles';
+import AdminViewJournalistOverview from '../../component/admin/users/AdminViewJournalistOverview';
 import SEO from '../../utils/SEO';
-import AdminDisableUser from '../../components/admin/users/AdminDisableUser';
+import AdminDisableUser from '../../component/admin/users/AdminDisableUser';
 
 ChartJS.register(
   CategoryScale,
@@ -46,12 +46,12 @@ ChartJS.register(
 );
 
 const AdminViewSingleUser = () => {
-  const [user, setUser] = useState<Author | null>(null);
+  const [user, setUser] = useState<iAuthor>({});
   const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [disableReason, setDisableReason] = useState('');
   const [isEditing, setIsEditing] = useState(false);
-  const [editedUser, setEditedUser] = useState<Partial<Author>>({});
+  const [editedUser, setEditedUser] = useState<Partial<iAuthor>>({});
   const { id } = useParams<{ id: string }>();
   const [isFormLoading, setIsFormLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
@@ -60,7 +60,7 @@ const AdminViewSingleUser = () => {
 
   const fetchSingleUser = async () => {
     try {
-      const response = await getSingleUser(id);
+      const response = await getSingleUser(id || '');
       if (response?.data?.worker) {
         setUser(response.data.worker);
         await generatePerformanceData();
@@ -82,8 +82,8 @@ const AdminViewSingleUser = () => {
     }
   };
 
-  const handleInputChange = (field: keyof Author, value: string) => {
-    setEditedUser((prev) => ({
+  const handleInputChange = (field: keyof iAuthor, value: string) => {
+    setEditedUser((prev: iAuthor) => ({
       ...prev,
       [field]: value,
     }));
@@ -95,7 +95,7 @@ const AdminViewSingleUser = () => {
       const response = await updateUser(id, editedUser);
       if (response?.status === 200) {
         toast.success('User updated successfully!');
-        setUser((prev) => ({ ...prev!, ...editedUser }));
+        setUser((prev: iUser) => ({ ...prev!, ...editedUser }));
         setEditedUser({});
         setIsEditing(false);
       } else {
@@ -118,7 +118,7 @@ const AdminViewSingleUser = () => {
       return;
     }
     try {
-      const response = await disableUser(id, disableReason);
+      const response = await disableUser(id || '', disableReason);
       if (response.status === 200) {
         await fetchSingleUser();
         setShowModal(false);

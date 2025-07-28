@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FiEdit, FiEye, FiPlus } from 'react-icons/fi';
+import { FiEdit, FiEye } from 'react-icons/fi';
 import { FaSearch } from 'react-icons/fa';
 import { iArticleType } from '../../utils/types/Article';
 import {
@@ -12,8 +12,8 @@ import ReactPaginate from 'react-paginate';
 import { formatDateTime } from '../../utils/helpers/articleHelpers';
 import SEO from '../../utils/SEO';
 import { BiEditAlt } from 'react-icons/bi';
-import AdminArticlesSubHeader from '../../components/staff/admin/AdminArticlesSubHeader';
-import EditorArticlesSubHeader from '../../components/staff/editor/EditorArticlesSubHeader';
+import AdminArticlesSubHeader from '../../component/staff/admin/AdminArticlesSubHeader';
+import EditorArticlesSubHeader from '../../component/staff/editor/EditorArticlesSubHeader';
 
 const StaffViewOwnArticles = () => {
   const [articles, setArticles] = useState<iArticleType[]>([]);

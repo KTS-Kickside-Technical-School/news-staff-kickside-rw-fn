@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Logo from '/logo.svg';
 import { Link, useNavigate } from 'react-router-dom';
 import { userLogin } from '../../utils/requests/authRequest';
-import ButtonSpinner from '../../components/ButtonSpinner';
+import ButtonSpinner from '../../component/ButtonSpinner';
 import SEO from '../../utils/SEO';
 import { Helmet } from 'react-helmet-async';
 
