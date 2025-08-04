@@ -108,7 +108,7 @@ const StaffNewArticle = () => {
     <div className="p-6 bg-gray-50 min-h-screen">
       <ToastContainer />
       <SEO mainData={{ title: 'New Article - Kickside News' }} />
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-800 mb-6">
           Create New Article
         </h1>

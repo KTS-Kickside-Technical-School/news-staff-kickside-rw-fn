@@ -14,7 +14,7 @@ const AdminViewJournalistsArticles = ({
         }}
       />
 
-      <div>
+      <div className=''>
         <h2 className="text-xl font-bold mb-6 text-gray-800">
           Article Management
         </h2>
@@ -73,7 +73,7 @@ const AdminViewJournalistsArticles = ({
                   Staff View
                 </Link>
                 <Link
-                  to={`/news/${article.slug}`}
+                  to={`https://www.kickside.rw/news/${article.slug}`}
                   target="_blank"
                   className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-200 text-gray-800 text-sm font-medium rounded-md hover:bg-gray-300 transition"
                 >

@@ -247,7 +247,7 @@ const AdminViewSingleUser = () => {
           title: `Journalist: ${user.firstName} ${user.lastName} - Admin : Kickside Rwanda`,
         }}
       />
-      <div className="p-6 bg-gray-50 min-h-screen">
+      <div className="p-6 bg-gray-50 min-h-screen max-w-7xl mx-auto p-6">
         <div className="bg-white shadow-md rounded-lg max-w-full mx-auto overflow-hidden">
           <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-6 text-white">
             <div className="flex flex-col md:flex-row gap-6 items-center">
