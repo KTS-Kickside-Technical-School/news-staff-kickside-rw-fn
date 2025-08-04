@@ -7,7 +7,6 @@ import ReactPaginate from 'react-paginate';
 import { BiEditAlt } from 'react-icons/bi';
 import {
   getAllArticles,
-  getOwnArticles,
   journalistRequestEditAccess,
 } from '../../../utils/requests/articlesRequest';
 import SEO from '../../../utils/SEO';
