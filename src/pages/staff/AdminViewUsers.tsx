@@ -23,6 +23,7 @@ const AdminViewUsers = ({ profile }: { profile: any }) => {
     try {
       setIsLoading(true);
       const response = await getAllUsers();
+      console.log(response);
       if (response.status !== 200)
         throw new Error(response.message || 'Failed to fetch users');
       setUsers(response.data.workers || []);

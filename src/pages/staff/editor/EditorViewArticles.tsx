@@ -31,10 +31,7 @@ const EditorViewArticles = () => {
   const fetchArticles = async () => {
     try {
       setIsLoading(true);
-      const response =
-        profile?.role === 'Admin' || profile?.role === 'Editor'
-          ? await getAllArticles()
-          : await getOwnArticles();
+      const response = await getAllArticles();
 
       const message = response?.message || 'Failed to fetch articles';
       if (!response || response.status !== 200) throw new Error(message);
@@ -78,10 +75,6 @@ const EditorViewArticles = () => {
     switch (status.toLowerCase()) {
       case 'published':
         return 'bg-green-100 text-green-800';
-      case 'draft':
-        return 'bg-gray-100 text-gray-800';
-      case 'pending':
-        return 'bg-yellow-100 text-yellow-800';
       default:
         return 'bg-gray-100 text-gray-800';
     }
@@ -105,7 +98,7 @@ const EditorViewArticles = () => {
     <div className="p-6 bg-gray-50 min-h-screen">
       <ToastContainer />
       <SEO mainData={{ title: 'Journalist View Articles - Kickside News' }} />
-      <div className="max-w-8xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold text-gray-900">Articles list</h1>
         </div>
@@ -164,13 +157,13 @@ const EditorViewArticles = () => {
                         <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider max-w-[150px] truncate">
                           Category
                         </th>
-                        <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider max-w-[200px] truncate">
+                        <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider max-w-[100px] truncate">
                           Author
                         </th>
                         <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider w-40">
                           Date
                         </th>
-                        <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider w-28">
+                        <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider w-32">
                           Status
                         </th>
                         <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider w-40">
@@ -211,9 +204,10 @@ const EditorViewArticles = () => {
                                 : 'Unknown'}
                             </div>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-40">
+                          <td className="px-6 py-4 text-sm text-gray-500 w-40 break-words">
                             {formatDateTime(article?.createdAt)}
                           </td>
+
                           <td className="px-6 py-4 whitespace-nowrap text-sm w-28">
                             <span
                               className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(

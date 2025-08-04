@@ -31,10 +31,7 @@ const AdminViewArticles = () => {
   const fetchArticles = async () => {
     try {
       setIsLoading(true);
-      const response =
-        profile?.role === 'Admin' || profile?.role === 'Editor'
-          ? await getAllArticles()
-          : await getOwnArticles();
+      const response = await getAllArticles();
 
       const message = response?.message || 'Failed to fetch articles';
       if (!response || response.status !== 200) throw new Error(message);
@@ -211,7 +208,7 @@ const AdminViewArticles = () => {
                                 : 'Unknown'}
                             </div>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-40">
+                          <td className="px-6 py-4 text-sm text-gray-500 w-40 break-words">
                             {formatDateTime(article?.createdAt)}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm w-28">
