@@ -5,9 +5,10 @@ import {
   BiChevronDown,
   BiChevronUp,
   BiPlus,
+  BiFootball,
 } from 'react-icons/bi';
 import { BsMailbox } from 'react-icons/bs';
-import { FaNewspaper } from 'react-icons/fa';
+import { FaGlobe, FaNewspaper } from 'react-icons/fa';
 import { MdDashboard, MdLogout, MdMenu } from 'react-icons/md';
 import { PiArticleNyTimesBold } from 'react-icons/pi';
 import { Link, useLocation } from 'react-router-dom';
@@ -34,6 +35,28 @@ const StaffSideBar = ({ onLogout }: { onLogout: () => void }) => {
       to: profile.role === 'Admin' ? '/admin/dashboard' : '/staff/dashboard',
       label: 'Dashboard',
       icon: <MdDashboard size={18} />,
+    },
+    {
+      to: 'match-center',
+      label: 'Match Center',
+      icon: <FaNewspaper size={18} />,
+      subItems: [
+        {
+          to: '/staff/tr/match-center',
+          label: 'Center',
+          icon: <FaNewspaper size={16} />,
+        },
+        {
+          to: '/staff/tr/countries',
+          label: 'Country',
+          icon: <FaGlobe />,
+        },
+        {
+          to: '/staff/tr/teams',
+          label: 'Teams',
+          icon: <BiFootball />,
+        },
+      ],
     },
   ];
 
@@ -127,17 +150,25 @@ const StaffSideBar = ({ onLogout }: { onLogout: () => void }) => {
   useEffect(() => {
     const initialExpanded: Record<string, boolean> = {};
 
-    const allItems = [...adminItems, ...journalistItems, ...editorItems];
-    for (const item of allItems) {
-      if (item.subItems) {
-        const isActiveSubItem = item.subItems.some((subItem) =>
-          pathname.startsWith(subItem.to)
-        );
-        if (isActiveSubItem) {
-          initialExpanded[item.label] = true;
+    // Check all menu items for active sub-items
+    const checkItems = (items: any[]) => {
+      items.forEach((item) => {
+        if (item.subItems) {
+          const isActiveSubItem = item.subItems.some(
+            (subItem: any) =>
+              pathname.startsWith(subItem.to) || pathname === item.to
+          );
+          if (isActiveSubItem) {
+            initialExpanded[item.label] = true;
+          }
         }
-      }
-    }
+      });
+    };
+
+    checkItems(menuItems);
+    checkItems(adminItems);
+    checkItems(journalistItems);
+    checkItems(editorItems);
 
     setExpandedSections(initialExpanded);
   }, [pathname]);
@@ -154,7 +185,8 @@ const StaffSideBar = ({ onLogout }: { onLogout: () => void }) => {
     const isActive =
       pathname === to ||
       (subItems &&
-        subItems.some((subItem: any) => pathname.startsWith(subItem.to)));
+        subItems.some((subItem: any) => pathname.startsWith(subItem.to))) ||
+      (subItems && pathname.startsWith(to));
 
     return (
       <li key={to}>
@@ -180,7 +212,7 @@ const StaffSideBar = ({ onLogout }: { onLogout: () => void }) => {
                 ))}
             </div>
 
-            {isOpen && expandedSections[label] && (
+            {isOpen && (expandedSections[label] || isActive) && (
               <ul className="ml-8 mt-1 space-y-1">
                 {subItems.map((subItem: any) => (
                   <li key={subItem.to}>
@@ -236,7 +268,6 @@ const StaffSideBar = ({ onLogout }: { onLogout: () => void }) => {
     <div className="flex h-screen bg-gray-100">
       <ToastContainer />
 
-      {/* Responsive Sidebar - always visible but changes width */}
       <aside
         className={`relative bg-gray-900 text-white shadow-lg transition-all duration-300 flex flex-col ${
           isOpen ? 'w-64' : 'w-20'
@@ -280,40 +311,6 @@ const StaffSideBar = ({ onLogout }: { onLogout: () => void }) => {
           </button>
         </div>
       </aside>
-
-      <style>{`
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #4b5563;
-          border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #6b7280;
-        }
-        
-        @media (max-width: 768px) {
-          aside {
-            width: ${isOpen ? '240px' : '72px'} !important;
-          }
-          aside h1 {
-            font-size: 1rem;
-          }
-        }
-        
-        @media (max-width: 480px) {
-          aside {
-            width: ${isOpen ? '200px' : '60px'} !important;
-          }
-          .text-sm {
-            font-size: 0.75rem;
-          }
-        }
-      `}</style>
     </div>
   );
 };
