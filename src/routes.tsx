@@ -103,10 +103,7 @@ const AppRouter = () => {
               />
               <Route path="article/new" element={<StaffNewArticle />} />
               <Route path="article/edit/:slug" element={<StaffEditArticle />} />
-              <Route
-                path="article/:id"
-                element={<StaffViewArticleDetails profile={profile} />}
-              />
+              <Route path="article/:id" element={<StaffViewArticleDetails />} />
               <Route
                 path="articles/edit-requests"
                 element={<StaffViewArticlesEditRequests profile={profile} />}

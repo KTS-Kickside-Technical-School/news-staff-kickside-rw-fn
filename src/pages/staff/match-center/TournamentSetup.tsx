@@ -1,4 +1,5 @@
 import SetupTournament from '../../../component/staff/SetupTournament';
+import SetupTournamentPerYear from '../../../component/staff/SetupTournamentPerYear';
 import SetupTournamentYear from '../../../component/staff/SetupTournamentYear';
 import SEO from '../../../utils/SEO';
 
@@ -31,13 +32,7 @@ const TournamentSetup = () => {
 
         <SetupTournamentYear />
         <SetupTournament />
-
-        <div className="bg-white shadow rounded-lg p-6">
-          <h2 className="text-lg font-semibold mb-4">Setup Matches</h2>
-          <p className="text-gray-500">
-            Configure fixtures (Team A vs Team B, date, venue) here.
-          </p>
-        </div>
+        <SetupTournamentPerYear />
 
         <div className="bg-white shadow rounded-lg p-6">
           <h2 className="text-lg font-semibold mb-4">Manage Venues</h2>

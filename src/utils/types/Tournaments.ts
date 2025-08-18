@@ -17,6 +17,8 @@ export interface ITeam {
 }
 
 export interface ITrYear {
+    _id?: string
+    name?: string
     startYear: string;
     endYear: string;
     isLatest?: boolean;
@@ -29,6 +31,17 @@ export interface ITournament {
     foundedYear?: string;
     country: any;
     type: string;
+    createdAt?: string;
+    updatedAt?: string;
+}
+
+export interface ITrSeason {
+    _id?: string;
+    name: string;
+    tournament: any;
+    startDate: string;
+    endDate: string;
+    teams: string[];
     createdAt?: string;
     updatedAt?: string;
 }
