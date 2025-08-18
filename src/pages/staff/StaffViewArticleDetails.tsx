@@ -12,11 +12,15 @@ import { formatDateTime } from '../../utils/helpers/articleHelpers';
 import { GrStatusInfo } from 'react-icons/gr';
 import { iArticleType } from '../../utils/types/Article';
 
-const StaffViewArticleDetails = ({ profile }: any) => {
+const StaffViewArticleDetails = () => {
   const [article, setArticle] = useState<iArticleType | null>(null);
   const [comments, setComments] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const profileParsed = sessionStorage.getItem('profile');
+  const profile = profileParsed ? JSON.parse(profileParsed) : {};
+
   const { id } = useParams<{ id: string }>();
   const userRole = profile?.role;
   const navigate = useNavigate();
