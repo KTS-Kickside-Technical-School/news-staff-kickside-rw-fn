@@ -44,4 +44,14 @@ export interface ITrSeason {
     teams: string[];
     createdAt?: string;
     updatedAt?: string;
+    year?: any;
+    status?: string;
+}
+
+export interface ITrMatch {
+    _id?: string;
+    homeTeam: any;
+    awayTeam: any;
+    tournamentSeason: any;
+    matchTime: string;
 }

@@ -1,5 +1,5 @@
 import axiosInstance from "../../axios/axiosInstance";
-import { ITournament, ITrSeason, ITrYear } from "../../types/Tournaments";
+import { ITournament, ITrMatch, ITrSeason, ITrYear } from "../../types/Tournaments";
 import { handleError } from "../articlesRequest";
 
 export const saveTournamentYear = async (data: ITrYear) => {
@@ -41,6 +41,33 @@ export const getYears = async () => {
 export const saveTournamentSeason = async (data: ITrSeason) => {
     try {
         const response = await axiosInstance.post("/api/tr/new-tr-season", data);
+        return response.data
+    } catch (error) {
+        return handleError(error)
+    }
+}
+
+export const getAllTournamentsSeasons = async () => {
+    try {
+        const response = await axiosInstance.get("/api/tr/tr-seasons");
+        return response.data
+    } catch (error) {
+        return handleError(error)
+    }
+}
+
+export const getSingleTournamentSeason = async (id: string) => {
+    try {
+        const response = await axiosInstance.get(`/api/tr/tr-season/${id}`);
+        return response.data
+    } catch (error) {
+        return handleError(error)
+    }
+}
+
+export const saveMatch = async (data: ITrMatch) => {
+    try {
+        const response = await axiosInstance.post("/api/tr/new-match", data);
         return response.data
     } catch (error) {
         return handleError(error)
