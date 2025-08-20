@@ -138,11 +138,10 @@ const ViewTournamentsSeasons = () => {
         </table>
       </div>
 
-      {/* Modal */}
       {selectedTournament && (
         <NewTournamentMatchModal
           tournament={selectedTournament}
-          onClose={() => 'S'}
+          onClose={() => setSelectedTournament(null)}
         />
       )}
     </div>

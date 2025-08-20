@@ -1,4 +1,4 @@
-import { ITeam, ITrSeason } from '../../../utils/types/Tournaments';
+import { ITrSeason } from '../../../utils/types/Tournaments';
 import { useState } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import { saveMatch } from '../../../utils/requests/tournaments/tournamentsRequests';
@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 
 interface NewTournamentMatchModalProps {
   tournament: ITrSeason;
-  onClose: () => void;
+  onClose: any;
 }
 
 const NewTournamentMatchModal = ({
@@ -72,7 +72,7 @@ const NewTournamentMatchModal = ({
               required
             >
               <option value="">Select team</option>
-              {tournament.teams.map((team: ITeam) => (
+              {tournament.teams.map((team: any) => (
                 <option
                   key={team._id}
                   value={team._id}
@@ -84,7 +84,6 @@ const NewTournamentMatchModal = ({
             </select>
           </div>
 
-          {/* Away Team */}
           <div>
             <label className="block text-gray-700 mb-1">Away Team</label>
             <select
@@ -106,7 +105,6 @@ const NewTournamentMatchModal = ({
             </select>
           </div>
 
-          {/* Match Time */}
           <div>
             <label className="block text-gray-700 mb-1">Match Time</label>
             <input
@@ -118,7 +116,6 @@ const NewTournamentMatchModal = ({
             />
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
             className="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition"

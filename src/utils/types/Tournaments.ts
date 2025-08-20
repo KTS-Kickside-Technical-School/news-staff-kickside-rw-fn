@@ -50,8 +50,12 @@ export interface ITrSeason {
 
 export interface ITrMatch {
     _id?: string;
+    tournamentSeason: any;
     homeTeam: any;
     awayTeam: any;
-    tournamentSeason: any;
+    homeScore?: number;
+    awayScore?: number;
+    matchDuration?: number;
     matchTime: string;
+    status?: string;
 }

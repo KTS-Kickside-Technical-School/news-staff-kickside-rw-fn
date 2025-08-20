@@ -33,6 +33,7 @@ import MatchCenter from './pages/staff/match-center/MatchCenter';
 import StaffViewCountries from './pages/staff/match-center/StaffViewCountries';
 import StaffViewTeams from './pages/staff/match-center/StaffViewTeams';
 import TournamentSetup from './pages/staff/match-center/TournamentSetup';
+import Matches from './pages/staff/match-center/Matches';
 
 const AuthContext = createContext<any>(null);
 
@@ -119,6 +120,7 @@ const AppRouter = () => {
               <Route path="tr/countries" element={<StaffViewCountries />} />
               <Route path="tr/teams" element={<StaffViewTeams />} />
               <Route path="tr/setup" element={<TournamentSetup />} />
+              <Route path="tr/matches" element={<Matches />} />
 
               <Route path="*" element={<StaffNotFound />} />
             </Route>

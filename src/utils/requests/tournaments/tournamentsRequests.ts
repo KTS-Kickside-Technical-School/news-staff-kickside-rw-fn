@@ -73,3 +73,12 @@ export const saveMatch = async (data: ITrMatch) => {
         return handleError(error)
     }
 }
+
+export const getMatches = async () => {
+    try {
+        const response = await axiosInstance.get("/api/tr/matches");
+        return response.data
+    } catch (error) {
+        return handleError(error);
+    }
+}
