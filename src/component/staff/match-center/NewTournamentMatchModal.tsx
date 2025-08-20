@@ -24,12 +24,7 @@ const NewTournamentMatchModal = ({
       return;
     }
     try {
-      console.log({
-        homeTeam,
-        awayTeam,
-        matchTime,
-        tournament: tournament.name,
-      });
+
       const response = await saveMatch({
         homeTeam,
         awayTeam,

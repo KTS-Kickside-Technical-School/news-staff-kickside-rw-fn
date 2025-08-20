@@ -82,3 +82,23 @@ export const getMatches = async () => {
         return handleError(error);
     }
 }
+
+export const getSingleMatchInfo = async (matchId: string) => {
+    try {
+        const response = await axiosInstance.get(`/api/tr/match-info/${matchId}`);
+        return response.data
+    } catch (error) {
+        return handleError(error)
+    }
+}
+
+export const updateMatch = async (_id: string, data: any) => {
+    try {
+
+        const response = await axiosInstance.put(`/api/tr/match-update/${_id}`, data);
+        return response.data
+
+    } catch (error) {
+        return handleError(error)
+    }
+}

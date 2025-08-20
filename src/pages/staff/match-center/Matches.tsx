@@ -4,6 +4,7 @@ import SEO from '../../../utils/SEO';
 import { getMatches } from '../../../utils/requests/tournaments/tournamentsRequests';
 import { ITrMatch } from '../../../utils/types/Tournaments';
 import { FaEye, FaEdit } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 const Matches = () => {
   const [data, setData] = useState<ITrMatch[]>([]);
@@ -55,7 +56,6 @@ const Matches = () => {
           Matches List
         </h1>
 
-        {/* Table */}
         <div className="overflow-x-auto">
           <table className="w-full table-auto border-collapse">
             <thead>
@@ -126,12 +126,12 @@ const Matches = () => {
                     </td>
 
                     <td className="px-4 py-2 border-b flex gap-2">
-                      <button
+                      <Link
                         className="flex items-center gap-1 px-3 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-                        onClick={() => toast.info(`Viewing match ${item._id}`)}
+                        to={`/staff/tr/match/${item._id}`}
                       >
                         <FaEye size={14} /> View
-                      </button>
+                      </Link>
                       <button
                         className="flex items-center gap-1 px-3 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition"
                         onClick={() => toast.info(`Editing match ${item._id}`)}
