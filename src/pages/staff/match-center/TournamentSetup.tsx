@@ -4,6 +4,8 @@ import SetupTournament from '../../../component/staff/SetupTournament';
 import SetupTournamentPerYear from '../../../component/staff/SetupTournamentPerYear';
 import SetupTournamentYear from '../../../component/staff/SetupTournamentYear';
 import SEO from '../../../utils/SEO';
+import NewPlayer from '../../../component/staff/match-center/NewPlayer';
+import PlayersList from '../../../component/staff/match-center/PlayersList';
 
 const tabs = [
   { key: '0', label: 'Year Setup', component: <SetupTournamentYear /> },
@@ -17,6 +19,16 @@ const tabs = [
     key: '3',
     label: 'View Seasons',
     component: <ViewTournamentsSeasons />,
+  },
+  {
+    key: '4',
+    label: 'New Player',
+    component: <NewPlayer />,
+  },
+  {
+    key: '5',
+    label: 'Players',
+    component: <PlayersList />,
   },
 ];
 

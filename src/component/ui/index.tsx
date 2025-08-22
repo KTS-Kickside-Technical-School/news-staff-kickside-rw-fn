@@ -10,3 +10,4 @@ export { default as TabsTrigger } from './TabsTrigger';
 export { default as Badge } from './Badge';
 export { default as Separator } from './Separator';
 export { default as Modal } from './Modal';
+export { default as Input } from './Input';

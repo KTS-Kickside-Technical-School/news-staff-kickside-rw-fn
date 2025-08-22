@@ -59,3 +59,11 @@ export interface ITrMatch {
     matchTime: string;
     status?: string;
 }
+
+export interface IPlayer {
+    _id?: string;
+    firstname: string;
+    lastname?: string;
+    nationality: string;
+    birthdate: string;
+}

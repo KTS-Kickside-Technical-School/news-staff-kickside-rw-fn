@@ -36,6 +36,9 @@ const SingleMatch = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
+  const [isEditingScore, setIsEditingScore] = useState(false);
+  const [homeScore, setHomeScore] = useState('');
+  const [awayScore, setAwayScore] = useState('');
 
   const getMatch = async () => {
     try {
@@ -45,6 +48,8 @@ const SingleMatch = () => {
       if (response.status === 200) {
         setMatch(response.data.match);
         setMatchActivities(response.data.matchActivities);
+        setHomeScore(response.data.match.homeScore?.toString() || '0');
+        setAwayScore(response.data.match.awayScore?.toString() || '0');
         return;
       }
       throw new Error(response.message);
@@ -72,6 +77,42 @@ const SingleMatch = () => {
     } finally {
       setIsUpdatingStatus(false);
     }
+  };
+
+  const handleSaveScore = async () => {
+    try {
+      setIsUpdatingStatus(true);
+      const response = await updateMatch(matchId, {
+        homeScore: parseInt(homeScore),
+        awayScore: parseInt(awayScore),
+      });
+
+      if (response.status === 200) {
+        toast.success('Match score updated successfully');
+        setMatch((prev) =>
+          prev
+            ? {
+                ...prev,
+                homeScore: parseInt(homeScore),
+                awayScore: parseInt(awayScore),
+              }
+            : null
+        );
+        setIsEditingScore(false);
+      } else {
+        throw new Error(response.message || 'Failed to update score');
+      }
+    } catch (error: any) {
+      toast.error(error.message || 'Error updating match score');
+    } finally {
+      setIsUpdatingStatus(false);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setHomeScore(match?.homeScore?.toString() || '0');
+    setAwayScore(match?.awayScore?.toString() || '0');
+    setIsEditingScore(false);
   };
 
   useEffect(() => {
@@ -196,7 +237,7 @@ const SingleMatch = () => {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-3 items-center text-center py-6">
-                  {/* Home Team */}
+
                   <div className="space-y-4">
                     <img
                       src={match.homeTeam?.logo}
@@ -206,7 +247,19 @@ const SingleMatch = () => {
                     <h3 className="text-xl font-semibold">
                       {match.homeTeam?.name}
                     </h3>
-                    <div className="text-3xl font-bold">{match.homeScore}</div>
+                    {isEditingScore ? (
+                      <input
+                        type="number"
+                        value={homeScore}
+                        onChange={(e) => setHomeScore(e.target.value)}
+                        className="text-3xl font-bold text-center w-20 mx-auto"
+                        min="0"
+                      />
+                    ) : (
+                      <div className="text-3xl font-bold">
+                        {match.homeScore}
+                      </div>
+                    )}
                   </div>
 
                   <div className="space-y-2">
@@ -218,9 +271,28 @@ const SingleMatch = () => {
                     <div className="text-sm text-muted-foreground">
                       {match.matchDuration} minutes
                     </div>
+                    {isEditingScore && (
+                      <div className="flex justify-center gap-2 mt-4">
+                        <Button
+                          size="sm"
+                          onClick={handleSaveScore}
+                          disabled={isUpdatingStatus}
+                        >
+                          {isUpdatingStatus ? 'Saving...' : 'Save'}
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={handleCancelEdit}
+                          disabled={isUpdatingStatus}
+                        >
+                          Cancel
+                        </Button>
+                      </div>
+                    )}
                   </div>
 
-                  {/* Away Team */}
+
                   <div className="space-y-4">
                     <img
                       src={match.awayTeam?.logo}
@@ -230,7 +302,19 @@ const SingleMatch = () => {
                     <h3 className="text-xl font-semibold">
                       {match.awayTeam?.name}
                     </h3>
-                    <div className="text-3xl font-bold">{match.awayScore}</div>
+                    {isEditingScore ? (
+                      <input
+                        type="number"
+                        value={awayScore}
+                        onChange={(e: any) => setAwayScore(e.target.value)}
+                        className="text-3xl font-bold text-center w-20 mx-auto"
+                        min="0"
+                      />
+                    ) : (
+                      <div className="text-3xl font-bold">
+                        {match.awayScore}
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -267,7 +351,6 @@ const SingleMatch = () => {
                   variant="outline"
                   className="w-full justify-start"
                   onClick={() => {
-                    console.log('S');
                     setIsStatusModalOpen(true);
                   }}
                 >
@@ -277,8 +360,9 @@ const SingleMatch = () => {
                   variant="outline"
                   className="w-full justify-start"
                   onClick={() => {
-                    /* Update score */
+                    setIsEditingScore(true);
                   }}
+                  disabled={isEditingScore}
                 >
                   Update Score
                 </Button>

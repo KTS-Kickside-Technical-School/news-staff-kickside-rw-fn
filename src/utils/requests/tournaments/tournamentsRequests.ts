@@ -1,5 +1,5 @@
 import axiosInstance from "../../axios/axiosInstance";
-import { ITournament, ITrMatch, ITrSeason, ITrYear } from "../../types/Tournaments";
+import { IPlayer, ITournament, ITrMatch, ITrSeason, ITrYear } from "../../types/Tournaments";
 import { handleError } from "../articlesRequest";
 
 export const saveTournamentYear = async (data: ITrYear) => {
@@ -98,6 +98,42 @@ export const updateMatch = async (_id: string, data: any) => {
         const response = await axiosInstance.put(`/api/tr/match-update/${_id}`, data);
         return response.data
 
+    } catch (error) {
+        return handleError(error)
+    }
+}
+
+export const savePlayer = async (data: IPlayer) => {
+    try {
+        const response = await axiosInstance.post("/api/tr/new-player", data);
+        return response.data
+    } catch (error) {
+        return handleError(error)
+    }
+}
+
+export const getPlayers = async () => {
+    try {
+        const response = await axiosInstance.get("/api/tr/players");
+        return response.data
+    } catch (error) {
+        return handleError(error)
+    }
+}
+
+export const saveTeamPlayer = async (data: any) => {
+    try {
+        const response = await axiosInstance.post("/api/tr/new-team-player", data);
+        return response.data
+    } catch (error) {
+        return handleError(error)
+    }
+}
+
+export const getPlayerDetails = async (id: string) => {
+    try {
+        const response = await axiosInstance.get(`/api/tr/player-info/${id}`);
+        return response.data
     } catch (error) {
         return handleError(error)
     }
