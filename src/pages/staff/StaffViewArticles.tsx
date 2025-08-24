@@ -121,7 +121,7 @@ const StaffViewArticles = ({ profile }: any) => {
               {error}
             </div>
           )}
-          {profile.role === 'Admin' ? (
+          {profile?.role === 'Admin' ? (
             <AdminArticlesSubHeader />
           ) : (
             <EditorArticlesSubHeader />

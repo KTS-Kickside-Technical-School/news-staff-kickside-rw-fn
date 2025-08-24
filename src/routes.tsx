@@ -29,6 +29,13 @@ import EditorViewArticles from './pages/staff/editor/EditorViewArticles';
 import RoleProtectedRoute from './component/staff/RoleProtectRoute';
 import AdminNewArticle from './pages/staff/admin/AdminNewArticle';
 import AdminViewArticles from './pages/staff/admin/AdminViewArticles';
+import MatchCenter from './pages/staff/match-center/MatchCenter';
+import StaffViewCountries from './pages/staff/match-center/StaffViewCountries';
+import StaffViewTeams from './pages/staff/match-center/StaffViewTeams';
+import TournamentSetup from './pages/staff/match-center/TournamentSetup';
+import Matches from './pages/staff/match-center/Matches';
+import SingleMatch from './pages/staff/match-center/SingleMatch';
+import PlayerDetails from './component/staff/match-center/PlayerDetails';
 
 const AuthContext = createContext<any>(null);
 
@@ -88,14 +95,7 @@ const AppRouter = () => {
         <Route path="/staff">
           <Route path="forgot-password" element={<ForgotPassword />} />
           <Route path="reset-password" element={<ResetPassword />} />
-          <Route
-            element={
-              <AuthGuard
-                isAuthenticated={isAuthenticated}
-                fetchUserProfile={fetchUserProfile}
-              />
-            }
-          >
+          <Route element={<AuthGuard isAuthenticated={isAuthenticated} />}>
             <Route
               element={<StaffLayout onLogout={logout} profile={profile} />}
             >
@@ -106,10 +106,7 @@ const AppRouter = () => {
               />
               <Route path="article/new" element={<StaffNewArticle />} />
               <Route path="article/edit/:slug" element={<StaffEditArticle />} />
-              <Route
-                path="article/:id"
-                element={<StaffViewArticleDetails profile={profile} />}
-              />
+              <Route path="article/:id" element={<StaffViewArticleDetails />} />
               <Route
                 path="articles/edit-requests"
                 element={<StaffViewArticlesEditRequests profile={profile} />}
@@ -120,6 +117,16 @@ const AppRouter = () => {
               />
 
               <Route path="settings" element={<Settings />} />
+
+              <Route path="tr/match-center" element={<MatchCenter />} />
+              <Route path="tr/countries" element={<StaffViewCountries />} />
+              <Route path="tr/teams" element={<StaffViewTeams />} />
+              <Route path="tr/setup" element={<TournamentSetup />}/>
+                <Route path="tr/setup/player/:id" element={<PlayerDetails />} />
+
+              <Route path="tr/matches" element={<Matches />} />
+              <Route path="tr/match/:id" element={<SingleMatch />} />
+
               <Route path="*" element={<StaffNotFound />} />
             </Route>
           </Route>

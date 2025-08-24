@@ -14,7 +14,7 @@ const Header = () => {
   const fetchArticles = async () => {
     try {
       const response = await getPublishedArticles();
-      console.log(response);
+
       if (response.status === 200) {
         setAllArticles(response.articles);
         setHasFetched(true);
