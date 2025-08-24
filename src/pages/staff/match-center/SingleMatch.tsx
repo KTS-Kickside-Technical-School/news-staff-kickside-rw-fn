@@ -22,10 +22,12 @@ import {
   Modal,
 } from '../../../component/ui';
 import {
+  formatEventType,
   formatTimeOnly,
   formatTournamentsTime,
 } from '../../../utils/helpers/tournamentsHelpers';
 import UpdateMatchStatusForm from '../../../component/staff/match-center/tournament/UpdateMatchStatusForm';
+import NewMatchEventForm from '../../../component/staff/match-center/tournament/NewMatchEventForm';
 
 const SingleMatch = () => {
   const params = useParams();
@@ -39,6 +41,9 @@ const SingleMatch = () => {
   const [isEditingScore, setIsEditingScore] = useState(false);
   const [homeScore, setHomeScore] = useState('');
   const [awayScore, setAwayScore] = useState('');
+  const [isAddingGoal, setIsAddingGoal] = useState(false);
+  const [isSavingGoal, setIsSavingGoal] = useState(false);
+  const [players, setPlayers] = useState<any>();
 
   const getMatch = async () => {
     try {
@@ -50,6 +55,7 @@ const SingleMatch = () => {
         setMatchActivities(response.data.matchActivities);
         setHomeScore(response.data.match.homeScore?.toString() || '0');
         setAwayScore(response.data.match.awayScore?.toString() || '0');
+        setPlayers(response.data.players);
         return;
       }
       throw new Error(response.message);
@@ -177,8 +183,26 @@ const SingleMatch = () => {
           isLoading={isUpdatingStatus}
         />
       </Modal>
+      <Modal
+        isOpen={isAddingGoal}
+        onClose={() => setIsAddingGoal(false)}
+        title="Add Match Event"
+      >
+        <NewMatchEventForm
+          match={match}
+          teams={[match.homeTeam, match.awayTeam]}
+          players={players}
+          onUpdate={() => {
+            setIsSavingGoal(true);
+            getMatch();
+            setIsAddingGoal(false);
+            setIsSavingGoal(false);
+          }}
+          onCancel={() => setIsAddingGoal(false)}
+          isLoading={isSavingGoal}
+        />
+      </Modal>
 
-      {/* Header with Actions */}
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Match Details</h1>
@@ -188,21 +212,10 @@ const SingleMatch = () => {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button
-            variant="outline"
-            onClick={() => {
-              /* Add edit match functionality */
-            }}
-          >
+          <Button variant="outline" onClick={() => {}}>
             Edit Match Info
           </Button>
-          <Button
-            onClick={() => {
-              /* Add activity functionality */
-            }}
-          >
-            Add Activity
-          </Button>
+          <Button onClick={() => {}}>Add Activity</Button>
           <Button
             variant="secondary"
             onClick={() => {
@@ -237,7 +250,6 @@ const SingleMatch = () => {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-3 items-center text-center py-6">
-
                   <div className="space-y-4">
                     <img
                       src={match.homeTeam?.logo}
@@ -291,7 +303,6 @@ const SingleMatch = () => {
                       </div>
                     )}
                   </div>
-
 
                   <div className="space-y-4">
                     <img
@@ -356,7 +367,7 @@ const SingleMatch = () => {
                 >
                   Change Match Status
                 </Button>
-                <Button
+                {/* <Button
                   variant="outline"
                   className="w-full justify-start"
                   onClick={() => {
@@ -365,30 +376,20 @@ const SingleMatch = () => {
                   disabled={isEditingScore}
                 >
                   Update Score
-                </Button>
+                </Button> */}
 
                 <Button
                   variant="outline"
                   className="w-full justify-start"
                   onClick={() => {
-                    /* Add event */
+                    setIsAddingGoal(true);
                   }}
                 >
-                  Add Match Event
-                </Button>
-                <Button
-                  variant="outline"
-                  className="w-full justify-start"
-                  onClick={() => {
-                    /* Upload media */
-                  }}
-                >
-                  Upload Media
+                  New Event
                 </Button>
               </CardContent>
             </Card>
 
-            {/* Recent Activities Preview */}
             <Card>
               <CardHeader>
                 <CardTitle>Recent Activities</CardTitle>
@@ -399,9 +400,11 @@ const SingleMatch = () => {
                     key={activity?._id}
                     className="py-2 border-b last:border-b-0"
                   >
-                    <div className="font-medium">{activity?.activity}</div>
+                    <div className="font-medium">
+                      {activity.minute}' {formatEventType(activity?.eventType)}
+                    </div>
                     <div className="text-sm text-muted-foreground">
-                      {activity?.summary}
+                      {activity?.description}
                     </div>
                     <div className="text-xs text-muted-foreground">
                       {new Date(activity?.createdAt).toLocaleString()}
@@ -433,8 +436,9 @@ const SingleMatch = () => {
               <div className="flex justify-between items-center">
                 <CardTitle>Match Activities</CardTitle>
                 <Button
+                  variant="outline"
                   onClick={() => {
-                    /* Add activity modal */
+                    setIsAddingGoal(true);
                   }}
                 >
                   Add New Activity
@@ -447,10 +451,17 @@ const SingleMatch = () => {
                   <div key={activity?._id} className="p-4 border rounded-lg">
                     <div className="flex justify-between items-start">
                       <div>
-                        <h4 className="font-semibold">{activity?.activity}</h4>
+                        <h4 className="font-semibold">
+                          {activity.minute}'{' '}
+                          {formatEventType(activity?.eventType)}
+                        </h4>
                         <p className="text-muted-foreground">
-                          {activity?.summary}
+                          [{activity?.outcome}]{activity?.description}
                         </p>
+                      </div>
+                      <div>
+                        {activity?.player?.firstname}{' '}
+                        {activity?.player?.lastname}
                       </div>
                       <div className="text-right">
                         <div className="text-sm text-muted-foreground">

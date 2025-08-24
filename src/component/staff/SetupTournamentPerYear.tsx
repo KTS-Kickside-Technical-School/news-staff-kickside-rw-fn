@@ -91,14 +91,12 @@ const SetupTournamentPerYear = () => {
     if (nameTouched) return;
 
     const tr = tournaments.find((t) => t._id === form.tournamentId);
-    const yr = years.find((y) => y._id === form.year);
 
     const base = tr?.name?.trim() || '';
-    const yearLabel = yr?.name?.trim() || '';
 
-    const auto = [base, yearLabel].filter(Boolean).join(' ');
+    const auto = [base].filter(Boolean).join(' ');
     setForm((prev) => ({ ...prev, name: auto }));
-  }, [form.tournamentId, form.year, tournaments, years, nameTouched]);
+  }, [form.tournamentId, tournaments, nameTouched]);
 
   const minEndDate = form.startDate || undefined;
 
@@ -299,9 +297,6 @@ const SetupTournamentPerYear = () => {
         <div className="flex flex-col md:col-span-2">
           <label htmlFor="name" className="mb-2 font-medium">
             Name {REQUIRED}{' '}
-            <span className="text-gray-500 text-sm">
-              (auto from tournament + season; you can edit)
-            </span>
           </label>
           <input
             type="text"

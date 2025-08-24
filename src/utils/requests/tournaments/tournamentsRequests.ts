@@ -138,3 +138,12 @@ export const getPlayerDetails = async (id: string) => {
         return handleError(error)
     }
 }
+
+export const saveMatchEvent = async (data: any) => {
+    try {
+        const response = await axiosInstance.post("/api/tr/new-match-event", data);
+        return response.data
+    } catch (error) {
+        return handleError(error)
+    }
+}
