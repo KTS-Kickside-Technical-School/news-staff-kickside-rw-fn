@@ -21,6 +21,7 @@ export interface iNewArticle {
     coverImage: string;
     content: string;
     category: string;
+    language:string
 }
 
 export interface iUpdateArticle {
@@ -28,6 +29,7 @@ export interface iUpdateArticle {
     coverImage: string;
     content: string;
     category: string;
+    language:string
 }
 
 export interface MonthlyAnalytics {
