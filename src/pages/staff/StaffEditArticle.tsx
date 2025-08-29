@@ -48,7 +48,8 @@ const ErrorDisplay = ({ message }: any) => (
 const StaffEditArticle = () => {
   const { slug } = useParams();
   const [category, setCategory] = useState('');
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState(''); 
+  const [articleLanguage, setArticleLanguage] = useState("");
   const [coverImage, setCoverImage] = useState('');
   const [content, setContent] = useState('');
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -112,6 +113,7 @@ const StaffEditArticle = () => {
           setTitle(articleData.title || '');
           setCoverImage(articleData.coverImage || null);
           setContent(articleData.content || '');
+          setArticleLanguage(articleData.language)
         } else {
           throw new Error('Invalid article data');
         }
@@ -149,6 +151,7 @@ const StaffEditArticle = () => {
         content,
         title,
         category,
+        language:articleLanguage,
       });
       if (response.status !== 200) {
         toast.error(response.message);
@@ -233,6 +236,25 @@ const StaffEditArticle = () => {
               )}
             </div>
 
+            <div>
+              <label
+                htmlFor="category"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
+                Language
+              </label>
+              <select
+                name=""
+                id=""
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                onChange={(e)=>setArticleLanguage(e.target.value)}
+                value={articleLanguage}
+              >
+                <option value="kinyarwanda">Kinyarwanda</option>
+                <option value="english">English</option>
+              </select>
+            </div>
+            
             <div>
               <label
                 htmlFor="category"
