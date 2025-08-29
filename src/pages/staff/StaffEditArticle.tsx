@@ -113,6 +113,7 @@ const StaffEditArticle = () => {
           setTitle(articleData.title || '');
           setCoverImage(articleData.coverImage || null);
           setContent(articleData.content || '');
+          setArticleLanguage(articleData.language)
         } else {
           throw new Error('Invalid article data');
         }

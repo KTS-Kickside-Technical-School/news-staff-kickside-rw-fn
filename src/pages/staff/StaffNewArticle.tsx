@@ -13,7 +13,7 @@ import ButtonSpinner from "../../component/ButtonSpinner";
 const StaffNewArticle = () => {
   const [category, setCategory] = useState("");
   const [title, setTitle] = useState("");
-  const [articleLanguage, setArticleLanguage] = useState("");
+  const [articleLanguage, setArticleLanguage] = useState("kinyarwanda");
   const [coverImage, setCoverImage] = useState("");
   const [content, setContent] = useState("");
   const [uploadProgress, setUploadProgress] = useState(0);
