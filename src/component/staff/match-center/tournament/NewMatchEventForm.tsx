@@ -3,6 +3,7 @@ import { ITeam } from '../../../../utils/types/Tournaments';
 import { saveMatchEvent } from '../../../../utils/requests/tournaments/tournamentsRequests';
 import { toast } from 'react-toastify';
 import GoalForm from './GoalForm';
+import FaulForm from './FaulForm';
 
 const eventTypes = [
   'shot_on_target',
@@ -179,10 +180,9 @@ const NewMatchEventForm: React.FC<AddGoalFormProps> = ({
   const [activeTab, setActiveTab] = useState(tabs[0].id);
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
+    <div className="bg-white rounded-lg p-6">
       <h2 className="text-2xl font-bold text-gray-800 mb-6">Add Match Event</h2>
 
-      {/* Tab Navigation with improved styling */}
       <div className="flex border-b border-gray-200 mb-6">
         {tabs.map((tab) => (
           <button
@@ -199,7 +199,6 @@ const NewMatchEventForm: React.FC<AddGoalFormProps> = ({
         ))}
       </div>
 
-      {/* Tab Content */}
       <div className="space-y-4">
         {activeTab === 'goal' && (
           <GoalForm
@@ -210,15 +209,20 @@ const NewMatchEventForm: React.FC<AddGoalFormProps> = ({
             )}
             isLoading={isLoading || isSubmitting}
             match={match}
-            onSubmit={handleSubmit}
-            formData={formData}
-            onChange={handleChange}
-            errors={errors}
           />
         )}
-
-        {/* You'll need to create similar forms for other tabs */}
-        {activeTab !== 'goal' && (
+        {activeTab === 'card' && (
+          <FaulForm
+            teams={teams}
+            allPlayers={allPlayers}
+            eventOptions={remakeEventOptions(
+              tabs.find((t) => t.id === 'card')!.events
+            )}
+            isLoading={isLoading || isSubmitting}
+            match={match}
+          />
+        )}
+        {activeTab !== 'goal' && activeTab !== 'card' && (
           <div className="text-center py-8 text-gray-500">
             <p className="text-lg font-medium">
               Form for {tabs.find((t) => t.id === activeTab)?.label} events

@@ -29,7 +29,7 @@ interface SquadPlayer {
   team: Team;
 }
 
-interface GoalFormProps {
+interface FaulFormProps {
   teams: any[];
   allPlayers: SquadPlayer[];
   eventOptions: EventOption[];
@@ -37,13 +37,13 @@ interface GoalFormProps {
   match: Match;
 }
 
-const GoalForm = ({
+const FaulForm = ({
   teams,
   allPlayers,
   eventOptions,
   isLoading,
   match,
-}: GoalFormProps) => {
+}: FaulFormProps) => {
   const [search, setSearch] = useState({
     player: '',
     relatedPlayer: '',
@@ -63,16 +63,6 @@ const GoalForm = ({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDescriptionEdited, setIsDescriptionEdited] = useState(false);
-
-  const isOwnGoal = formData.eventType === 'own_goal';
-
-  const getBenefitingTeam = () => {
-    if (!isOwnGoal || !match || !formData.team) return null;
-
-    return match.homeTeam._id === formData.team
-      ? match.awayTeam
-      : match.homeTeam;
-  };
 
   useEffect(() => {
     if (match?._id) {
@@ -98,7 +88,6 @@ const GoalForm = ({
     formData.minute,
     formData.eventType,
     isDescriptionEdited,
-    isOwnGoal,
   ]);
 
   const handleChange = (
@@ -158,24 +147,13 @@ const GoalForm = ({
     if (!formData.outcome) {
       newErrors.outcome = 'Outcome is required';
     }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const generateDescription = () => {
-    const scoringTeam = teams.find((t) => t._id === formData.team);
-    const scoringTeamName = scoringTeam?.name || 'Unknown Team';
-
-    let benefitingTeam = scoringTeam;
-    let benefitingTeamName = scoringTeamName;
-
-    if (isOwnGoal && match) {
-      benefitingTeam =
-        match.homeTeam._id === formData.team ? match.awayTeam : match.homeTeam;
-      benefitingTeamName = benefitingTeam?.name || 'Opponent';
-    }
-
+    const team =
+      teams.find((t) => t._id === formData.team)?.name || 'Unknown Team';
     const player = allPlayers.find(
       (p) => p.player._id === formData.player
     )?.player;
@@ -193,19 +171,13 @@ const GoalForm = ({
         : 'Unknown Player';
     }
 
-    const goalType =
-      eventOptions.find((e) => e.value === formData.eventType)?.label || 'Goal';
+    const cardType =
+      eventOptions.find((e) => e.value === formData.eventType)?.label || 'Card';
 
-    let description = '';
+    let description = `${playerName}  for ${team} made fault and received ${cardType} on  ${formData.minute} minute`;
 
-    if (isOwnGoal) {
-      description = `Own goal scored by ${playerName} (${scoringTeamName}) for ${benefitingTeamName} in the ${formData.minute} minute`;
-    } else {
-      description = `${goalType} scored by ${playerName} for ${scoringTeamName} in the ${formData.minute} minute`;
-    }
-
-    if (relatedPlayerName && !isOwnGoal) {
-      description += `, assisted by ${relatedPlayerName}`;
+    if (relatedPlayerName) {
+      description += `, the victim of the fault is ${relatedPlayerName}`;
     }
 
     return description + '.';
@@ -222,33 +194,17 @@ const GoalForm = ({
     setIsSubmitting(true);
 
     try {
-      let teamToCredit = formData.team;
-
-      if (isOwnGoal && match) {
-        teamToCredit =
-          match.homeTeam._id === formData.team
-            ? match.awayTeam._id
-            : match.homeTeam._id;
-      }
-
       const dataToSave = {
         ...formData,
-        team: teamToCredit,
         player: formData.player || undefined,
         relatedPlayer: formData.relatedPlayer || undefined,
         outcome: formData.outcome || undefined,
-        metadata: isOwnGoal
-          ? {
-              ownGoalScoredByTeam: formData.team,
-              ownGoalScoredByPlayer: formData.player,
-            }
-          : undefined,
       };
 
       const response = await saveMatchEvent(dataToSave);
 
       if (response.status === 201) {
-        toast.success('Goal event saved successfully');
+        toast.success('Card is saved successfully');
 
         setFormData({
           match: match._id,
@@ -284,8 +240,6 @@ const GoalForm = ({
     ? allPlayers.filter((player) => player.team._id === formData.team)
     : allPlayers;
 
-  const benefitingTeam = getBenefitingTeam();
-
   return (
     <>
       <ToastContainer
@@ -300,23 +254,13 @@ const GoalForm = ({
         pauseOnHover
       />
 
-      <div className="p-6 bg-white rounded-lg shadow-md">
+      <div className="p-6 bg-white rounded-lg">
         <div className="mb-6">
-          <h2 className="text-2xl font-bold text-gray-800">
-            New Goal Event Details
-          </h2>
+          <h2 className="text-2xl font-bold text-gray-800">New Faul Card </h2>
           <p className="text-gray-600 mt-1">
             {match?.homeTeam?.name || 'Home'} vs{' '}
             {match?.awayTeam?.name || 'Away'}
           </p>
-          {isOwnGoal && (
-            <div className="mt-2 p-3 bg-yellow-100 border border-yellow-300 rounded-md">
-              <p className="text-yellow-800 text-sm font-medium">
-                ⚠️ Own Goal Selected: The goal will be credited to{' '}
-                {benefitingTeam?.name || 'the opposing team'}
-              </p>
-            </div>
-          )}
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -342,10 +286,10 @@ const GoalForm = ({
               )}
             </div>
 
+            {/* Team Field */}
             <div className="flex flex-col">
               <label className="text-gray-700 text-sm font-medium mb-1">
-                {isOwnGoal ? 'Team Scoring Own Goal' : 'Scoring Team'}{' '}
-                <span className="text-red-500">*</span>
+                Team <span className="text-red-500">*</span>
               </label>
               <select
                 name="team"
@@ -369,7 +313,7 @@ const GoalForm = ({
 
             <div className="flex flex-col">
               <label className="text-gray-700 text-sm font-medium mb-1">
-                Goal Type <span className="text-red-500">*</span>
+                Card type <span className="text-red-500">*</span>
               </label>
               <select
                 name="eventType"
@@ -379,7 +323,7 @@ const GoalForm = ({
                   errors.eventType ? 'border-red-500' : 'border-gray-300'
                 }`}
               >
-                <option value="">Select goal type</option>
+                <option value="">Select card type</option>
                 {eventOptions.map((event: EventOption) => (
                   <option key={event.value} value={event.value}>
                     {event.label}
@@ -399,10 +343,10 @@ const GoalForm = ({
                 name="outcome"
                 value={formData.outcome}
                 onChange={handleChange}
-                className={`border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-400 focus:border-transparent  ${
+                className={`border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-400 focus:border-transparent ${
                   errors.outcome ? 'border-red-500' : 'border-gray-300'
                 }`}
-                placeholder="Enter outcome"
+                placeholder="Enter the outcome"
               />
               {errors.outcome && (
                 <p className="text-red-500 text-xs mt-1">{errors.outcome}</p>
@@ -418,8 +362,7 @@ const GoalForm = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col">
                 <label className="text-gray-700 text-sm font-medium mb-1">
-                  {isOwnGoal ? 'Player Scoring Own Goal' : 'Goal Scorer'}{' '}
-                  <span className="text-red-500">*</span>
+                  Card receiver <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -448,8 +391,7 @@ const GoalForm = ({
                     )
                     .map((item) => (
                       <option key={item.player._id} value={item.player._id}>
-                        {item.player.firstname} {item.player.lastname} (
-                        {item.team.name})
+                        {item.player.firstname} {item.player.lastname}
                       </option>
                     ))}
                 </select>
@@ -465,47 +407,38 @@ const GoalForm = ({
 
               <div className="flex flex-col">
                 <label className="text-gray-700 text-sm font-medium mb-1">
-                  Assisting Player
+                  Victim Player
                 </label>
-                {isOwnGoal ? (
-                  <p className="text-gray-500 text-sm italic">
-                    No assist for own goals
-                  </p>
-                ) : (
-                  <>
-                    <input
-                      type="text"
-                      placeholder="Search assisting player..."
-                      value={search.relatedPlayer}
-                      onChange={(e) =>
-                        setSearch({ ...search, relatedPlayer: e.target.value })
-                      }
-                      className="border border-gray-300 rounded-lg p-3 mb-2 focus:ring-2 focus:ring-blue-400 focus:border-transparent"
-                    />
-                    <select
-                      name="relatedPlayer"
-                      value={formData.relatedPlayer}
-                      onChange={handleChange}
-                      className="border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-400 focus:border-transparent"
-                      disabled={!formData.team}
-                    >
-                      <option value="">Select player</option>
-                      {filteredPlayers
-                        .filter((p) =>
-                          `${p.player.firstname} ${p.player.lastname}`
-                            .toLowerCase()
-                            .includes(search.relatedPlayer.toLowerCase())
-                        )
-                        .map((item) => (
-                          <option key={item.player._id} value={item.player._id}>
-                            {item.player.firstname} {item.player.lastname} (
-                            {item.team.name})
-                          </option>
-                        ))}
-                    </select>
-                  </>
-                )}
-                {!formData.team && !isOwnGoal && (
+                <input
+                  type="text"
+                  placeholder="Search assisting player..."
+                  value={search.relatedPlayer}
+                  onChange={(e) =>
+                    setSearch({ ...search, relatedPlayer: e.target.value })
+                  }
+                  className="border border-gray-300 rounded-lg p-3 mb-2 focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                />
+                <select
+                  name="relatedPlayer"
+                  value={formData.relatedPlayer}
+                  onChange={handleChange}
+                  className="border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                  disabled={!formData.team}
+                >
+                  <option value="">Select player</option>
+                  {filteredPlayers
+                    .filter((p) =>
+                      `${p.player.firstname} ${p.player.lastname}`
+                        .toLowerCase()
+                        .includes(search.relatedPlayer.toLowerCase())
+                    )
+                    .map((item) => (
+                      <option key={item.player._id} value={item.player._id}>
+                        {item.player.firstname} {item.player.lastname}
+                      </option>
+                    ))}
+                </select>
+                {!formData.team && (
                   <p className="text-gray-500 text-xs mt-1">
                     Please select a team first
                   </p>
@@ -594,4 +527,4 @@ const GoalForm = ({
   );
 };
 
-export default GoalForm;
+export default FaulForm;
