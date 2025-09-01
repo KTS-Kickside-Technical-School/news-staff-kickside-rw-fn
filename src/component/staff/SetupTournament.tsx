@@ -3,6 +3,8 @@ import { toast } from 'react-toastify';
 import { saveTournament } from '../../utils/requests/tournaments/tournamentsRequests';
 import { getCountries } from '../../utils/requests/tournaments/countriesRequest';
 import { ICountry } from '../../utils/types/Tournaments';
+import { uploadImageToCloudinary } from '../../utils/helpers/cloudinary';
+import { useDropzone } from 'react-dropzone';
 
 const SetupTournament = () => {
   const [formData, setFormData] = useState({
@@ -11,10 +13,13 @@ const SetupTournament = () => {
     type: '',
     description: '',
     foundedYear: '',
+    logo: '',
   });
   const [countries, setCountries] = useState<ICountry[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
+  const [logoUrl, setLogoUrl] = useState('');
+  const [uploadProgress, setUploadProgress] = useState(0);
   useEffect(() => {
     const fetchCountries = async () => {
       try {
@@ -50,6 +55,7 @@ const SetupTournament = () => {
       newErrors.foundedYear = 'Founded year must be a valid number';
     if (!formData.description.trim())
       newErrors.description = 'Description is required';
+    if (!formData.logo.trim()) newErrors.logo = 'Logo is required';
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -69,7 +75,9 @@ const SetupTournament = () => {
           type: '',
           description: '',
           foundedYear: '',
+          logo: '',
         });
+        setLogoUrl('');
         return;
       }
       throw new Error(response.message || 'Error saving the tournament');
@@ -77,6 +85,49 @@ const SetupTournament = () => {
       toast.error(error.message || 'Error saving the tournament');
     }
   };
+
+  const handleImageUpload = async (file: any) => {
+    try {
+      setUploadProgress(0);
+      const { url } = await uploadImageToCloudinary(file);
+      setUploadProgress(100);
+      return url;
+    } catch (error) {
+      toast.error('Image upload failed. Please try again.');
+      throw error;
+    }
+  };
+
+  const handleDrop = async (acceptedFiles: any) => {
+    const file = acceptedFiles[0];
+    if (file) {
+      if (!file.type.startsWith('image/')) {
+        toast.error('Please upload a valid image file.');
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error('File size exceeds 5MB.');
+        return;
+      }
+
+      try {
+        toast.info('Uploading image...');
+        const url = await handleImageUpload(file);
+        setLogoUrl(url);
+        setFormData((prev) => ({ ...prev, logo: url }));
+        toast.success('Image uploaded successfully!');
+      } catch (error) {
+        console.error('Error uploading image:', error);
+      } finally {
+        setUploadProgress(0);
+      }
+    }
+  };
+
+  const { getRootProps, getInputProps } = useDropzone({
+    accept: { 'image/*': [] },
+    onDrop: handleDrop,
+  });
 
   return (
     <div className="bg-white shadow rounded-lg p-6">
@@ -174,7 +225,48 @@ const SetupTournament = () => {
           )}
         </div>
 
-        <div className="flex flex-col col-span-2">
+        <div>
+          <label htmlFor="foundedYear" className="mb-2 font-medium">
+            Logo <span className="text-red-500">*</span>
+          </label>
+          <div
+            {...getRootProps()}
+            className="relative border-2 border-gray-300 border-dashed rounded-lg p-4 flex justify-center items-center cursor-pointer"
+          >
+            <input {...getInputProps()} />
+            {logoUrl ? (
+              <div className="w-full text-center">
+                <img
+                  src={logoUrl}
+                  alt="Uploaded Cover"
+                  className="max-w-full h-auto mx-auto mb-2 rounded-md"
+                />
+              </div>
+            ) : (
+              <p className="text-gray-500">
+                Drag & Drop or Click to Upload an Image
+              </p>
+            )}
+          </div>
+          {errors.logo && (
+            <p className="text-red-500 text-sm mt-1">{errors.logo}</p>
+          )}
+          {uploadProgress > 0 && uploadProgress < 100 && (
+            <div className="mt-2">
+              <p className="text-sm text-gray-500 mb-1">
+                Uploading: {uploadProgress}%
+              </p>
+              <div className="w-full bg-gray-200 rounded-md">
+                <div
+                  style={{ width: `${uploadProgress}%` }}
+                  className="h-2 bg-blue-500 rounded-md"
+                ></div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="flex flex-col">
           <label htmlFor="description" className="mb-2 font-medium">
             Description <span className="text-red-500">*</span>
           </label>

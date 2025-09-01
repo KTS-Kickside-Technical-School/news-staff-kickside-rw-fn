@@ -41,7 +41,6 @@ const SingleMatch = () => {
   const [isEditingScore, setIsEditingScore] = useState(false);
   const [homeScore, setHomeScore] = useState('');
   const [awayScore, setAwayScore] = useState('');
-  const [isAddingGoal, setIsAddingGoal] = useState(false);
   const [isSavingGoal, setIsSavingGoal] = useState(false);
   const [players, setPlayers] = useState<any>();
 
@@ -70,7 +69,7 @@ const SingleMatch = () => {
     try {
       setIsUpdatingStatus(true);
       const response = await updateMatch(matchId, { status: newStatus });
-      console.log(response);
+
       if (response.status === 200) {
         toast.success('Match status updated successfully');
         setMatch((prev) => (prev ? { ...prev, status: newStatus } : null));
@@ -421,7 +420,6 @@ const SingleMatch = () => {
                   onUpdate={() => {
                     setIsSavingGoal(true);
                     getMatch();
-                    setIsAddingGoal(false);
                     setIsSavingGoal(false);
                   }}
                   isLoading={isSavingGoal}

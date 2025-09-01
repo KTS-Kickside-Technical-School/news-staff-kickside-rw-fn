@@ -79,7 +79,7 @@ const PlayerAddTeam = ({ player, onClose }: NewTournamentMatchModalProps) => {
         jerseyNumber: formData.jerseyNumber,
         stillPlaying: formData.stillPlaying,
       });
-      console.log(response);
+
       if (response.status === 201) {
         toast.success('Player assigned to team successfully!');
         setTimeout(() => onClose(), 3000);

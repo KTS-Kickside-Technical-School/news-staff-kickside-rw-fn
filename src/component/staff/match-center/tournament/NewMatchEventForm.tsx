@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { ITeam } from '../../../../utils/types/Tournaments';
-import { saveMatchEvent } from '../../../../utils/requests/tournaments/tournamentsRequests';
-import { toast } from 'react-toastify';
 import GoalForm from './GoalForm';
 import FaulForm from './FaulForm';
 
@@ -39,12 +37,6 @@ const remakeEventOptions = (events: string[]) => {
   }));
 };
 
-const eventOptions = eventTypes
-  .map((event) => ({
-    value: event,
-    label: event.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()),
-  }))
-  .sort((a, b) => a.label.localeCompare(b.label));
 
 interface AddGoalFormProps {
   players: { home: any[]; away: any[] };
@@ -58,91 +50,11 @@ const NewMatchEventForm: React.FC<AddGoalFormProps> = ({
   players,
   teams,
   match,
-  onUpdate,
   isLoading = false,
 }) => {
-  const [formData, setFormData] = useState({
-    match: match?._id || '',
-    team: '',
-    player: '',
-    relatedPlayer: '',
-    minute: '',
-    eventType: '',
-    outcome: '',
-    description: '',
-  });
-  const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
+
 
   const allPlayers = [...players.home, ...players.away];
-
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-
-    // Clear error when field is updated
-    if (errors[e.target.name as keyof typeof errors]) {
-      setErrors((prev) => {
-        const newErrors = { ...prev };
-        delete newErrors[e.target.name as keyof typeof errors];
-        return newErrors;
-      });
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // Validate form
-    const newErrors: any = {};
-    if (!formData.team) newErrors.team = 'Team is required';
-    if (!formData.eventType) newErrors.eventType = 'Event type is required';
-    if (!formData.minute) newErrors.minute = 'Minute is required';
-    if (!formData.description)
-      newErrors.description = 'Description is required';
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      toast.error('Please fill all required fields');
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    try {
-      const dataToSave = {
-        ...formData,
-        player: formData.player || undefined,
-        relatedPlayer: formData.relatedPlayer || undefined,
-        outcome: formData.outcome || undefined,
-      };
-
-      const response = await saveMatchEvent(dataToSave);
-      if (response.status === 201) {
-        toast.success('Event saved successfully');
-        setFormData({
-          match: match._id,
-          team: '',
-          player: '',
-          relatedPlayer: '',
-          minute: '',
-          eventType: '',
-          outcome: '',
-          description: '',
-        });
-        onUpdate('success');
-        return;
-      }
-      throw new Error(response.message);
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to save event');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   const tabs = [
     { id: 'goal', label: 'Goal', events: ['goal', 'own_goal', 'penalty_goal'] },
@@ -207,7 +119,7 @@ const NewMatchEventForm: React.FC<AddGoalFormProps> = ({
             eventOptions={remakeEventOptions(
               tabs.find((t) => t.id === 'goal')!.events
             )}
-            isLoading={isLoading || isSubmitting}
+            isLoading={isLoading}
             match={match}
           />
         )}
@@ -218,7 +130,7 @@ const NewMatchEventForm: React.FC<AddGoalFormProps> = ({
             eventOptions={remakeEventOptions(
               tabs.find((t) => t.id === 'card')!.events
             )}
-            isLoading={isLoading || isSubmitting}
+            isLoading={isLoading}
             match={match}
           />
         )}

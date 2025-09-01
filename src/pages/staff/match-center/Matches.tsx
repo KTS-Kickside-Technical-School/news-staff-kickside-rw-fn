@@ -14,7 +14,7 @@ const Matches = () => {
     setLoading(true);
     try {
       const response = await getMatches();
-      console.log(response);
+
       if (response.status === 200) {
         setData(response.data);
       } else {

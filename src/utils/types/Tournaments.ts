@@ -46,6 +46,7 @@ export interface ITrSeason {
     updatedAt?: string;
     year?: any;
     status?: string;
+    isLatest: boolean;
 }
 
 export interface ITrMatch {

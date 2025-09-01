@@ -107,7 +107,7 @@ const AdminDashboard = () => {
     try {
       setMonth(month);
       setIsLoading(true);
-      console.log(month);
+
       const res = await getTopArticlesByMonth(month, year);
       setTopArticles(res.data.monthsTopRead || []);
     } catch (err) {
