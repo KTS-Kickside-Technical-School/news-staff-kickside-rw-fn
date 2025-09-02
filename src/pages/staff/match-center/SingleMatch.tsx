@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import SEO from '../../../utils/SEO';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import {
   getSingleMatchInfo,
   updateMatch,
@@ -41,7 +41,6 @@ const SingleMatch = () => {
   const [isEditingScore, setIsEditingScore] = useState(false);
   const [homeScore, setHomeScore] = useState('');
   const [awayScore, setAwayScore] = useState('');
-  const [isAddingGoal, setIsAddingGoal] = useState(false);
   const [isSavingGoal, setIsSavingGoal] = useState(false);
   const [players, setPlayers] = useState<any>();
 
@@ -70,7 +69,7 @@ const SingleMatch = () => {
     try {
       setIsUpdatingStatus(true);
       const response = await updateMatch(matchId, { status: newStatus });
-      console.log(response);
+
       if (response.status === 200) {
         toast.success('Match status updated successfully');
         setMatch((prev) => (prev ? { ...prev, status: newStatus } : null));
@@ -170,7 +169,19 @@ const SingleMatch = () => {
           title: `${match.homeTeam?.name} vs ${match.awayTeam?.name} - Match Details`,
         }}
       />
-
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        style={{ zIndex: 9999 }} // Ensure it's above other elements
+      />{' '}
       <Modal
         isOpen={isStatusModalOpen}
         onClose={() => setIsStatusModalOpen(false)}
@@ -183,26 +194,6 @@ const SingleMatch = () => {
           isLoading={isUpdatingStatus}
         />
       </Modal>
-      <Modal
-        isOpen={isAddingGoal}
-        onClose={() => setIsAddingGoal(false)}
-        title="Add Match Event"
-      >
-        <NewMatchEventForm
-          match={match}
-          teams={[match.homeTeam, match.awayTeam]}
-          players={players}
-          onUpdate={() => {
-            setIsSavingGoal(true);
-            getMatch();
-            setIsAddingGoal(false);
-            setIsSavingGoal(false);
-          }}
-          onCancel={() => setIsAddingGoal(false)}
-          isLoading={isSavingGoal}
-        />
-      </Modal>
-
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Match Details</h1>
@@ -216,17 +207,11 @@ const SingleMatch = () => {
             Edit Match Info
           </Button>
           <Button onClick={() => {}}>Add Activity</Button>
-          <Button
-            variant="secondary"
-            onClick={() => {
-              /* Add lineup functionality */
-            }}
-          >
+          <Button variant="secondary" onClick={() => {}}>
             Manage Lineup
           </Button>
         </div>
       </div>
-      {/* Main Content Tabs */}
       <Tabs
         value={activeTab}
         onValueChange={setActiveTab}
@@ -377,16 +362,6 @@ const SingleMatch = () => {
                 >
                   Update Score
                 </Button> */}
-
-                <Button
-                  variant="outline"
-                  className="w-full justify-start"
-                  onClick={() => {
-                    setIsAddingGoal(true);
-                  }}
-                >
-                  New Event
-                </Button>
               </CardContent>
             </Card>
 
@@ -429,56 +404,26 @@ const SingleMatch = () => {
             </Card>
           </div>
         </TabsContent>
-        {/* Activities Tab */}
         <TabsContent value="activities">
           <Card>
             <CardHeader>
               <div className="flex justify-between items-center">
-                <CardTitle>Match Activities</CardTitle>
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    setIsAddingGoal(true);
-                  }}
-                >
-                  Add New Activity
-                </Button>
+                <CardTitle> New Match Event</CardTitle>
               </div>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {matchActivities?.map((activity: any) => (
-                  <div key={activity?._id} className="p-4 border rounded-lg">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <h4 className="font-semibold">
-                          {activity.minute}'{' '}
-                          {formatEventType(activity?.eventType)}
-                        </h4>
-                        <p className="text-muted-foreground">
-                          [{activity?.outcome}]{activity?.description}
-                        </p>
-                      </div>
-                      <div>
-                        {activity?.player?.firstname}{' '}
-                        {activity?.player?.lastname}
-                      </div>
-                      <div className="text-right">
-                        <div className="text-sm text-muted-foreground">
-                          {new Date(activity?.createdAt).toLocaleString()}
-                        </div>
-                        <Button variant="ghost" size="sm" className="mt-2">
-                          Edit
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-                {matchActivities?.length === 0 && (
-                  <div className="text-center py-8 text-muted-foreground">
-                    No activities recorded for this match
-                  </div>
-                )}
+                <NewMatchEventForm
+                  match={match}
+                  teams={[match.homeTeam, match.awayTeam]}
+                  players={players}
+                  onUpdate={() => {
+                    setIsSavingGoal(true);
+                    getMatch();
+                    setIsSavingGoal(false);
+                  }}
+                  isLoading={isSavingGoal}
+                />
               </div>
             </CardContent>
           </Card>

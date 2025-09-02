@@ -14,6 +14,7 @@ const Matches = () => {
     setLoading(true);
     try {
       const response = await getMatches();
+
       if (response.status === 200) {
         setData(response.data);
       } else {
@@ -61,6 +62,7 @@ const Matches = () => {
             <thead>
               <tr className="bg-gray-100 text-left">
                 <th className="px-4 py-2 border-b">#</th>
+                <th className="px-4 py-2 border-b">Tournament name</th>
                 <th className="px-4 py-2 border-b">Home Team</th>
                 <th className="px-4 py-2 border-b">Away Team</th>
 
@@ -90,6 +92,9 @@ const Matches = () => {
                     className="hover:bg-gray-50 transition-colors"
                   >
                     <td className="px-4 py-2 border-b">{index + 1}</td>
+                    <td className="px-4 py-2 border-b font-medium text-gray-700">
+                      {item.tournamentSeason?.name || 'N/A'}
+                    </td>
                     <td className="px-4 py-2 border-b font-medium text-gray-700">
                       {item.homeTeam?.name || 'N/A'}
                     </td>

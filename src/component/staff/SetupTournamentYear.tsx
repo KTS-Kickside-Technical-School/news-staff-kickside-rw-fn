@@ -111,7 +111,6 @@ const SetupTournamentYear = () => {
           />
         </div>
 
-        {/* Checkbox */}
         <div className="flex items-center gap-2 col-span-2">
           <input
             type="checkbox"

@@ -27,6 +27,7 @@ const SetupTournamentPerYear = () => {
     startDate: '',
     endDate: '',
     name: '',
+    isLatest: false,
     teamIds: [] as string[],
   });
 
@@ -136,6 +137,7 @@ const SetupTournamentPerYear = () => {
       name: form.name.trim(),
       teams: form.teamIds,
       year: form.year,
+      isLatest: form.isLatest,
     };
 
     try {
@@ -151,6 +153,7 @@ const SetupTournamentPerYear = () => {
           startDate: '',
           endDate: '',
           name: '',
+          isLatest: false,
           teamIds: [],
         });
         setNameTouched(false);
@@ -293,6 +296,34 @@ const SetupTournamentPerYear = () => {
             <span className="text-sm text-red-500">{errors.endDate}</span>
           )}
         </div>
+        <div className="flex flex-col">
+          <label htmlFor="isLatest" className="mb-2 font-medium">
+            Choose if the year is latest
+          </label>
+
+          <div className="flex items-center">
+            <button
+              type="button"
+              role="switch"
+              aria-checked={form.isLatest}
+              onClick={() =>
+                setForm((prev) => ({ ...prev, isLatest: !prev.isLatest }))
+              }
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-300 ${
+                form.isLatest ? 'bg-blue-600' : 'bg-gray-300'
+              }`}
+            >
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-300 ${
+                  form.isLatest ? 'translate-x-6' : 'translate-x-1'
+                }`}
+              />
+            </button>
+            <span className="ml-3 text-sm font-medium text-gray-700">
+              {form.isLatest ? 'Latest season' : 'Not latest'}
+            </span>
+          </div>
+        </div>
 
         <div className="flex flex-col md:col-span-2">
           <label htmlFor="name" className="mb-2 font-medium">
@@ -316,6 +347,7 @@ const SetupTournamentPerYear = () => {
             <span className="text-sm text-red-500">{errors.name}</span>
           )}
         </div>
+
         <TeamSelector
           teams={teams}
           form={form}
