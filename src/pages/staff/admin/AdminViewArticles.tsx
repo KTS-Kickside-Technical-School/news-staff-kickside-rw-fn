@@ -160,6 +160,9 @@ const AdminViewArticles = () => {
                         <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider max-w-[150px] truncate">
                           Category
                         </th>
+                        <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider max-w-[150px] truncate">
+                          Language
+                        </th>
                         <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider max-w-[200px] truncate">
                           Author
                         </th>
@@ -198,6 +201,11 @@ const AdminViewArticles = () => {
                           <td className="px-6 py-4 whitespace-nowrap max-w-[150px] truncate">
                             <div className="text-sm text-gray-900">
                               {article?.category}
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap max-w-[150px] truncate">
+                            <div className="text-sm text-gray-900">
+                              {article?.language}
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap max-w-[200px] truncate">

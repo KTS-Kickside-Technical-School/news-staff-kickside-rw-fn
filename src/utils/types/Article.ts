@@ -12,6 +12,7 @@ export interface iArticleType {
     status: string;
     isEditable: boolean;
     views: number;
+    language?: string;
     slug: string;
 }
 
@@ -21,7 +22,7 @@ export interface iNewArticle {
     coverImage: string;
     content: string;
     category: string;
-    language:string
+    language: string
 }
 
 export interface iUpdateArticle {
@@ -29,7 +30,7 @@ export interface iUpdateArticle {
     coverImage: string;
     content: string;
     category: string;
-    language:string
+    language: string
 }
 
 export interface MonthlyAnalytics {

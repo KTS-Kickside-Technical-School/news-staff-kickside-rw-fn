@@ -1,21 +1,21 @@
-import { useState } from "react";
-import { FiSave } from "react-icons/fi";
-import "react-quill/dist/quill.snow.css";
-import { useDropzone } from "react-dropzone";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { uploadImageToCloudinary } from "../../../utils/helpers/cloudinary";
-import { publishArticle } from "../../../utils/requests/articlesRequest";
-import SEO from "../../../utils/SEO";
-import RichTextEditor from "../../../component/staff/RichTextEditor";
-import ButtonSpinner from "../../../component/ButtonSpinner";
+import { useState } from 'react';
+import { FiSave } from 'react-icons/fi';
+import 'react-quill/dist/quill.snow.css';
+import { useDropzone } from 'react-dropzone';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { uploadImageToCloudinary } from '../../../utils/helpers/cloudinary';
+import { publishArticle } from '../../../utils/requests/articlesRequest';
+import SEO from '../../../utils/SEO';
+import RichTextEditor from '../../../component/staff/RichTextEditor';
+import ButtonSpinner from '../../../component/ButtonSpinner';
 
 const AdminNewArticle = () => {
-  const [category, setCategory] = useState("");
-  const [title, setTitle] = useState("");
-  const [articleLanguage, setArticleLanguage] = useState("kinyarwanda");
-  const [coverImage, setCoverImage] = useState("");
-  const [content, setContent] = useState("");
+  const [category, setCategory] = useState('');
+  const [title, setTitle] = useState('');
+  const [articleLanguage, setArticleLanguage] = useState('select');
+  const [coverImage, setCoverImage] = useState('');
+  const [content, setContent] = useState('');
   const [uploadProgress, setUploadProgress] = useState(0);
   const [errors, setErrors] = useState<any>({});
   const [loading, setLoading] = useState(false);
@@ -27,7 +27,7 @@ const AdminNewArticle = () => {
       setUploadProgress(100);
       return url;
     } catch (error) {
-      toast.error("Image upload failed. Please try again.");
+      toast.error('Image upload failed. Please try again.');
       throw error;
     }
   };
@@ -35,22 +35,22 @@ const AdminNewArticle = () => {
   const handleDrop = async (acceptedFiles: any) => {
     const file = acceptedFiles[0];
     if (file) {
-      if (!file.type.startsWith("image/")) {
-        toast.error("Please upload a valid image file.");
+      if (!file.type.startsWith('image/')) {
+        toast.error('Please upload a valid image file.');
         return;
       }
       if (file.size > 5 * 1024 * 1024) {
-        toast.error("File size exceeds 5MB.");
+        toast.error('File size exceeds 5MB.');
         return;
       }
 
       try {
-        toast.info("Uploading image...");
+        toast.info('Uploading image...');
         const url = await handleImageUpload(file);
         setCoverImage(url);
-        toast.success("Image uploaded successfully!");
+        toast.success('Image uploaded successfully!');
       } catch (error) {
-        console.error("Error uploading image:", error);
+        console.error('Error uploading image:', error);
       } finally {
         setUploadProgress(0);
       }
@@ -58,17 +58,18 @@ const AdminNewArticle = () => {
   };
 
   const { getRootProps, getInputProps } = useDropzone({
-    accept: { "image/*": [] },
+    accept: { 'image/*': [] },
     onDrop: handleDrop,
   });
 
   const validateForm = () => {
     const newErrors: any = {};
-    if (!title) newErrors.title = "Title is required.";
-    if (!category) newErrors.category = "Category is required.";
-    if (!coverImage) newErrors.coverImage = "Cover image is required.";
-    if (!content) newErrors.content = "Content is required.";
-    if (!articleLanguage) newErrors.category = "Article Laguage is required.";
+    if (!title) newErrors.title = 'Title is required.';
+    if (!category) newErrors.category = 'Category is required.';
+    if (!coverImage) newErrors.coverImage = 'Cover image is required.';
+    if (!content) newErrors.content = 'Content is required.';
+    if (articleLanguage === 'select')
+      newErrors.language = 'Article Laguage is required.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -76,7 +77,7 @@ const AdminNewArticle = () => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (!validateForm()) {
-      toast.error("Please fix the errors in the form.");
+      toast.error('Please fix the errors in the form.');
       return;
     }
     setLoading(true);
@@ -86,21 +87,21 @@ const AdminNewArticle = () => {
         content,
         title,
         category,
-        language:articleLanguage
+        language: articleLanguage,
       });
       if (response.status !== 201) {
         toast.error(response.message);
         setLoading(false);
         return;
       }
-      toast.success("Article saved successfully!");
-      setCoverImage("");
-      setContent("");
-      setTitle("");
-      setCategory("");
+      toast.success('Article saved successfully!');
+      setCoverImage('');
+      setContent('');
+      setTitle('');
+      setCategory('');
       setErrors({});
     } catch (error: any) {
-      console.error("Error publishing article:", error);
+      console.error('Error publishing article:', error);
       toast.error(error.message);
     } finally {
       setLoading(false);
@@ -110,7 +111,7 @@ const AdminNewArticle = () => {
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <ToastContainer />
-      <SEO mainData={{ title: "New Article - Kickside News" }} />
+      <SEO mainData={{ title: 'New Article - Kickside News' }} />
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-800 mb-6">
           Create New Article
@@ -189,12 +190,16 @@ const AdminNewArticle = () => {
                 name=""
                 id=""
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                onChange={(e)=>setArticleLanguage(e.target.value)}
+                onChange={(e) => setArticleLanguage(e.target.value)}
                 value={articleLanguage}
               >
+                <option value="select">Select a language</option>
                 <option value="kinyarwanda">Kinyarwanda</option>
                 <option value="english">English</option>
               </select>
+               {errors.language && (
+                <p className="text-red-500 text-sm mt-1">{errors.language}</p>
+              )}
             </div>
 
             <div>

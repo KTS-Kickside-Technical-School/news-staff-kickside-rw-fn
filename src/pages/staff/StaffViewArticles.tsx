@@ -105,7 +105,7 @@ const StaffViewArticles = ({ profile }: any) => {
       <SEO mainData={{ title: 'Journalist View Articles - Kickside News' }} />
       <div className="max-w-8xl mx-auto">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold text-gray-900">Articles list</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Articleu </h1>
           <Link
             to="/staff/article/new"
             className="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition shadow-sm"
