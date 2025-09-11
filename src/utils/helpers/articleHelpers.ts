@@ -49,3 +49,8 @@ export const getGreeting = (name:any) => {
         return `Good evening, ${name}!`;
     }
 };
+
+  export const langCategories: any = {
+    kinyarwanda: ['Imikino', 'Imyidagaduro', 'Ikoranabuhanga', 'Ubukungu'],
+    english: ['Sports', 'Entertainment', 'Technology', 'Business'],
+  };
