@@ -1,64 +1,22 @@
-import { useEffect, useState } from 'react';
+import ButtonSpinner from '../ButtonSpinner';
 import { FiSave } from 'react-icons/fi';
-import 'react-quill/dist/quill.snow.css';
-import { useDropzone } from 'react-dropzone';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import RichTextEditor from '../../component/staff/RichTextEditor';
+import RichTextEditor from './RichTextEditor';
+import { useState } from 'react';
 import { uploadImageToCloudinary } from '../../utils/helpers/cloudinary';
-import {
-  getSingleArticle,
-  updateArticle,
-} from '../../utils/requests/articlesRequest';
-import SEO from '../../utils/SEO';
-import ButtonSpinner from '../../component/ButtonSpinner';
-import { useParams } from 'react-router-dom';
-import { iArticleType } from '../../utils/types/Article';
+import { toast, ToastContainer } from 'react-toastify';
+import { publishArticle } from '../../utils/requests/articlesRequest';
+import { useDropzone } from 'react-dropzone';
 import { langCategories } from '../../utils/helpers/articleHelpers';
 
-const LoadingSkeleton = () => (
-  <div className="p-6 bg-gray-50 min-h-screen animate-pulse">
-    <div className="max-w-4xl mx-auto space-y-6">
-      <div className="h-8 bg-gray-300 rounded w-1/3"></div>
-      <div className="bg-white shadow-sm rounded-lg p-6 space-y-6">
-        <div className="h-48 bg-gray-300 rounded"></div>
-        <div className="h-10 bg-gray-300 rounded w-2/3"></div>
-        <div className="h-10 bg-gray-300 rounded w-1/2"></div>
-        <div className="h-40 bg-gray-300 rounded"></div>
-      </div>
-      <div className="h-10 bg-gray-300 rounded w-1/4 ml-auto"></div>
-    </div>
-  </div>
-);
-
-const ErrorDisplay = ({ message }: any) => (
-  <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-    <div className="bg-white p-6 rounded-lg shadow-md max-w-md w-full text-center">
-      <h2 className="text-2xl font-bold text-red-600 mb-4">Error</h2>
-      <p className="text-gray-700 mb-4">{message}</p>
-      <button
-        className="mt-2 px-4 py-2 bg-indigo-600 text-white rounded-md"
-        onClick={() => window.location.reload()}
-      >
-        Try Again
-      </button>
-    </div>
-  </div>
-);
-
-const StaffEditArticle = () => {
-  const { slug } = useParams();
+const CreateNewArticleForm = () => {
   const [category, setCategory] = useState('');
   const [title, setTitle] = useState('');
-  const [articleLanguage, setArticleLanguage] = useState('');
+  const [articleLanguage, setArticleLanguage] = useState('select');
   const [coverImage, setCoverImage] = useState('');
   const [content, setContent] = useState('');
   const [uploadProgress, setUploadProgress] = useState(0);
   const [errors, setErrors] = useState<any>({});
   const [loading, setLoading] = useState(false);
-  const [article, setArticle] = useState<iArticleType | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<any>(null);
 
   const handleImageUpload = async (file: any) => {
     try {
@@ -83,6 +41,7 @@ const StaffEditArticle = () => {
         toast.error('File size exceeds 5MB.');
         return;
       }
+
       try {
         toast.info('Uploading image...');
         const url = await handleImageUpload(file);
@@ -101,40 +60,14 @@ const StaffEditArticle = () => {
     onDrop: handleDrop,
   });
 
-  useEffect(() => {
-    const fetchSingleArticle = async (slug: any) => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const response = await getSingleArticle(slug);
-        const articleData = response?.data?.article;
-        if (articleData) {
-          setArticle(articleData);
-          setCategory(articleData.category || '');
-          setTitle(articleData.title || '');
-          setCoverImage(articleData.coverImage || null);
-          setContent(articleData.content || '');
-          setArticleLanguage(articleData.language);
-        } else {
-          throw new Error('Invalid article data');
-        }
-      } catch (err) {
-        console.error('Error fetching the article:', err);
-        setError('Failed to load the article. Please try again later.');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (slug) fetchSingleArticle(slug);
-  }, [slug]);
-
   const validateForm = () => {
     const newErrors: any = {};
-    if (!title.trim()) newErrors.title = 'Title is required.';
-    if (!category.trim()) newErrors.category = 'Category is required.';
+    if (!title) newErrors.title = 'Title is required.';
+    if (!category) newErrors.category = 'Category is required.';
     if (!coverImage) newErrors.coverImage = 'Cover image is required.';
-    if (!content.trim()) newErrors.content = 'Content is required.';
+    if (!content) newErrors.content = 'Content is required.';
+    if (articleLanguage === 'select')
+      newErrors.language = 'Article Laguage is required.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -147,35 +80,38 @@ const StaffEditArticle = () => {
     }
     setLoading(true);
     try {
-      const response = await updateArticle(article?._id || '', {
+      const response = await publishArticle({
         coverImage,
         content,
         title,
         category,
         language: articleLanguage,
       });
-      if (response.status !== 200) {
+      if (response.status !== 201) {
         toast.error(response.message);
+        setLoading(false);
         return;
       }
-      toast.success('Article updated successfully!');
+      toast.success('Article saved successfully!');
+      setCoverImage('');
+      setContent('');
+      setTitle('');
+      setCategory('');
+      setErrors({});
     } catch (error: any) {
-      console.error('Error updating article:', error);
-      toast.error(error.message || 'An error occurred.');
+      console.error('Error publishing article:', error);
+      toast.error(error.message);
     } finally {
       setLoading(false);
     }
   };
-
-  if (isLoading) return <LoadingSkeleton />;
-  if (error) return <ErrorDisplay message={error} />;
-
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <>
       <ToastContainer />
-      <SEO mainData={{ title: 'Edit Article - Kickside News' }} />
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-800 mb-6">Edit Article</h1>
+        <h1 className="text-3xl font-bold text-gray-800 mb-6">
+          Create New Article
+        </h1>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="bg-white shadow-sm rounded-lg p-6 space-y-6">
             <div>
@@ -188,11 +124,13 @@ const StaffEditArticle = () => {
               >
                 <input {...getInputProps()} />
                 {coverImage ? (
-                  <img
-                    src={coverImage}
-                    alt="Uploaded Cover"
-                    className="max-w-full h-auto mx-auto mb-2 rounded-md"
-                  />
+                  <div className="w-full text-center">
+                    <img
+                      src={coverImage}
+                      alt="Uploaded Cover"
+                      className="max-w-full h-auto mx-auto mb-2 rounded-md"
+                    />
+                  </div>
                 ) : (
                   <p className="text-gray-500">
                     Drag & Drop or Click to Upload an Image
@@ -254,9 +192,13 @@ const StaffEditArticle = () => {
                 }}
                 value={articleLanguage}
               >
+                <option value="select">Select a language</option>
                 <option value="kinyarwanda">Kinyarwanda</option>
                 <option value="english">English</option>
               </select>
+              {errors.language && (
+                <p className="text-red-500 text-sm mt-1">{errors.language}</p>
+              )}
             </div>
 
             <div>
@@ -271,7 +213,7 @@ const StaffEditArticle = () => {
                 id="category"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                 onChange={(e) => setCategory(e.target.value)}
-                defaultValue={category}
+                value={category}
               >
                 <option value="select">Select category</option>
                 {articleLanguage !== 'select' &&
@@ -281,6 +223,7 @@ const StaffEditArticle = () => {
                     </option>
                   ))}
               </select>
+
               {errors.category && (
                 <p className="text-red-500 text-sm mt-1">{errors.category}</p>
               )}
@@ -296,7 +239,7 @@ const StaffEditArticle = () => {
               <RichTextEditor
                 value={content}
                 onChange={setContent}
-                placeholder="Enter article content"
+                placeholder="Enter article contents"
               />
               {errors.content && (
                 <p className="text-red-500 text-sm mt-1">{errors.content}</p>
@@ -314,15 +257,16 @@ const StaffEditArticle = () => {
                 <ButtonSpinner />
               ) : (
                 <>
-                  <FiSave className="mr-2" /> Save Article
+                  <FiSave className="mr-2" />
+                  Save Article
                 </>
               )}
             </button>
           </div>
         </form>
       </div>
-    </div>
+    </>
   );
 };
 
-export default StaffEditArticle;
+export default CreateNewArticleForm;
