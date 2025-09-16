@@ -44,6 +44,8 @@ const SingleMatch = () => {
   const [isSavingGoal, setIsSavingGoal] = useState(false);
   const [players, setPlayers] = useState<any>();
 
+  const [isEditing, setIsEditing] = useState(false);
+
   const getMatch = async () => {
     try {
       setIsLoading(true);

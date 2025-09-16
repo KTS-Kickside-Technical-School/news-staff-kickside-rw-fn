@@ -62,6 +62,11 @@ const StaffSideBar = ({ onLogout }: { onLogout: () => void }) => {
           icon: <BiFootball />,
         },
         {
+          to: '/staff/tr/seasons',
+          label: 'Seasons',
+          icon: <BiFootball />,
+        },
+        {
           to: '/staff/tr/setup',
           label: 'Setup',
           icon: <BiFootball />,

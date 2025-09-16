@@ -37,11 +37,12 @@ export interface ITournament {
 
 export interface ITrSeason {
     _id?: string;
+    slug?: string;
     name: string;
     tournament: any;
     startDate: string;
     endDate: string;
-    teams: string[];
+    teams: any;
     createdAt?: string;
     updatedAt?: string;
     year?: any;

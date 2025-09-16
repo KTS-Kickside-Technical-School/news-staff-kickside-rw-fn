@@ -36,6 +36,8 @@ import TournamentSetup from './pages/staff/match-center/TournamentSetup';
 import Matches from './pages/staff/match-center/Matches';
 import SingleMatch from './pages/staff/match-center/SingleMatch';
 import PlayerDetails from './component/staff/match-center/PlayerDetails';
+import ViewTournamentsSeasons from './pages/staff/match-center/ViewTournamentsSeasons';
+import ViewSingleSeasonDetails from './pages/staff/match-center/ViewSingleSeasonDetails';
 
 const AuthContext = createContext<any>(null);
 
@@ -121,11 +123,18 @@ const AppRouter = () => {
               <Route path="tr/match-center" element={<MatchCenter />} />
               <Route path="tr/countries" element={<StaffViewCountries />} />
               <Route path="tr/teams" element={<StaffViewTeams />} />
-              <Route path="tr/setup" element={<TournamentSetup />}/>
-                <Route path="tr/setup/player/:id" element={<PlayerDetails />} />
+              <Route path="tr/setup" element={<TournamentSetup />} />
+              <Route path="tr/setup/player/:id" element={<PlayerDetails />} />
 
               <Route path="tr/matches" element={<Matches />} />
               <Route path="tr/match/:id" element={<SingleMatch />} />
+
+              <Route path="tr/seasons" element={<ViewTournamentsSeasons />} />
+              <Route
+                path="tr/seasons/:slug"
+                element={<ViewSingleSeasonDetails />}
+              />
+              <Route path="tr/seasons/match/:id" element={<SingleMatch />} />
 
               <Route path="*" element={<StaffNotFound />} />
             </Route>
