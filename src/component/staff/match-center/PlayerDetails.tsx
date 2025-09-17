@@ -116,15 +116,21 @@ const PlayerDetails = () => {
                   <div className="flex-1">
                     <h4 className="font-medium">{item.team?.name}</h4>
                     <p className="text-sm text-gray-500">
-                      {formatDateTime(item.startDate)} →{' '}
-                      {formatDateTime(item.endDate) || 'Present'}
+                      {formatDateTime(item.startDate | item.contractStartDate)}{' '}
+                      →{' '}
+                      {formatDateTime(item.endDate | item.contractEndTime) ||
+                        'Present'}
                     </p>
                     <p
                       className={`text-xs mt-1 font-semibold ${
-                        item.stillPlaying ? 'text-green-600' : 'text-red-500'
+                        item.isStillPlaying || item.stillPlaying
+                          ? 'text-green-600'
+                          : 'text-red-500'
                       }`}
                     >
-                      {item.stillPlaying ? 'Still Playing' : 'Inactive'}
+                      {item.isStillPlaying || item.stillPlaying
+                        ? 'Still Playing'
+                        : 'Inactive'}
                     </p>
                   </div>
                 </div>
