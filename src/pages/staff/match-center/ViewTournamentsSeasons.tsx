@@ -20,7 +20,7 @@ const ViewTournamentsSeasons = () => {
     setLoading(true);
     try {
       const response = await getAllTournamentsSeasons();
-      console.log(response);
+
       if (response.status === 200) {
         setData(response.data);
         return;
@@ -79,7 +79,6 @@ const ViewTournamentsSeasons = () => {
                   key={item._id}
                   className="w-full md:w-[48%] lg:w-[30%] bg-white rounded-2xl shadow-md hover:shadow-xl transition p-5 flex flex-col"
                 >
-                  {/* Header */}
                   <div className="flex items-center gap-3 mb-4">
                     <img
                       src={item?.tournament?.logo}
@@ -92,7 +91,6 @@ const ViewTournamentsSeasons = () => {
                     </div>
                   </div>
 
-                  {/* Status + Progress */}
                   <div className="mb-4">
                     <span
                       className={`px-3 py-1 text-sm rounded-full font-medium ${
@@ -135,7 +133,6 @@ const ViewTournamentsSeasons = () => {
                         item.slug || ''
                       )}`}
                       className="flex items-center gap-1 px-3 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition text-sm"
-                      onClick={() => toast.info(`Viewing ${item.name}`)}
                     >
                       <FaEye size={14} /> View
                     </Link>

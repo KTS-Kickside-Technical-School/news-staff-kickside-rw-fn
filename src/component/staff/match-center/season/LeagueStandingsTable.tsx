@@ -1,11 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import {
-  FaDownload,
-  FaSpinner,
-  FaTrophy,
-  FaQrcode,
-  FaInstagram,
-} from 'react-icons/fa';
+import React, { useState, useRef } from 'react';
+import { FaDownload, FaSpinner, FaTrophy, FaInstagram } from 'react-icons/fa';
 import { calculateStandings } from '../../../../utils/helpers/calculateStandings';
 
 interface Team {
@@ -34,7 +28,6 @@ interface StandingsTableProps {
   season: any;
 }
 
-
 const LeagueStandingsTable: React.FC<StandingsTableProps> = ({
   matches,
   allTeams,
@@ -42,8 +35,7 @@ const LeagueStandingsTable: React.FC<StandingsTableProps> = ({
 }) => {
   const [isExporting, setIsExporting] = useState(false);
   const [showExportOptions, setShowExportOptions] = useState(false);
-  const [showQROptions, setShowQROptions] = useState(false);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasRef: any = useRef<HTMLCanvasElement>(null);
 
   let standings: StandingsTeam[] = calculateStandings(matches);
 
@@ -127,18 +119,6 @@ const LeagueStandingsTable: React.FC<StandingsTableProps> = ({
     const placeholderImg = new Image();
     placeholderImg.src = canvas.toDataURL();
     return placeholderImg;
-  };
-
-  const handleQRAction = (action: 'match-center' | 'shop') => {
-    const url =
-      action === 'match-center'
-        ? 'https://www.kickside.rw/en/match-center'
-        : 'https://shop.kickside.rw';
-
-    // In a real implementation, you would generate a proper QR code
-    // For demo purposes, we'll just show the URL
-    window.open(url, '_blank');
-    setShowQROptions(false);
   };
 
   const handleExport = async () => {
@@ -421,7 +401,6 @@ const LeagueStandingsTable: React.FC<StandingsTableProps> = ({
       // Modern footer with QR code
       const footerY = tableTop + (maxTeams + 1) * rowHeight + 80;
 
-
       // Modern branding
       ctx.fillStyle = '#1e40af';
       ctx.font = 'bold 32px "Segoe UI", system-ui, sans-serif';
@@ -495,37 +474,6 @@ const LeagueStandingsTable: React.FC<StandingsTableProps> = ({
           </div>
 
           <div className="flex items-center space-x-4">
-            {/* QR Code Button */}
-            <div className="relative">
-              <button
-                onClick={() => setShowQROptions(!showQROptions)}
-                className="flex items-center gap-3 px-6 py-3 bg-white/20 backdrop-blur-sm text-white rounded-xl hover:bg-white/30 transition-all shadow-lg border border-white/30"
-              >
-                <FaQrcode className="text-xl" />
-                QR Code
-              </button>
-
-              {showQROptions && (
-                <div className="absolute right-0 top-16 bg-white rounded-xl shadow-2xl p-4 z-20 border border-gray-100 min-w-[220px]">
-                  <h4 className="font-semibold text-gray-800 mb-3">
-                    Choose Destination
-                  </h4>
-                  <button
-                    onClick={() => handleQRAction('match-center')}
-                    className="w-full text-left px-4 py-3 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors mb-2"
-                  >
-                    📊 Match Center
-                  </button>
-                  <button
-                    onClick={() => handleQRAction('shop')}
-                    className="w-full text-left px-4 py-3 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors"
-                  >
-                    🛒 Kickside Shop
-                  </button>
-                </div>
-              )}
-            </div>
-
             {/* Export Button */}
             <div className="relative">
               <button

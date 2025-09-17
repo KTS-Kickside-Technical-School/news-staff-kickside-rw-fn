@@ -43,13 +43,11 @@ const ViewSingleSeasonDetails = () => {
       setLoading(false);
     }
   };
-  console.log('ASSS', season);
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  // Filter matches
   const today = new Date().toDateString();
   const todayResults = matches.filter(
     (m) => m.status === 'finished' && new Date(m.date).toDateString() === today
@@ -70,11 +68,18 @@ const ViewSingleSeasonDetails = () => {
 
   const progress = season ? calculateProgress(matches, season.teams.length) : 0;
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-[70vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white shadow-xl rounded-2xl p-6">
       <SEO mainData={{ title: `${season?.name}` }} />
 
-      {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-4 mb-6">
         <div>
           <h2 className="text-3xl font-bold text-gray-800">{season?.name}</h2>
@@ -98,7 +103,6 @@ const ViewSingleSeasonDetails = () => {
         </div>
       </div>
 
-      {/* Progress */}
       <div className="mb-6">
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div
@@ -109,7 +113,6 @@ const ViewSingleSeasonDetails = () => {
         <p className="text-xs text-gray-500 mt-1">{progress}</p>
       </div>
 
-      {/* Actions */}
       <div className="mb-8">
         <button
           className="flex items-center gap-1 px-4 py-2 bg-green-600 text-white rounded-xl hover:bg-green-700 transition text-sm"
@@ -129,9 +132,7 @@ const ViewSingleSeasonDetails = () => {
 
         <TabsContent className={'mt-3'} value="summary">
           <div className="grid md:grid-cols-3 gap-8">
-            {/* Left Column (2/3) */}
             <div className="md:col-span-2 space-y-8">
-              {/* Today’s Results */}
               <section>
                 <h3 className="text-xl font-semibold mb-3 text-gray-800">
                   Today’s Results
@@ -151,7 +152,6 @@ const ViewSingleSeasonDetails = () => {
                 )}
               </section>
 
-              {/* Next 5 Matches */}
               <section>
                 <h3 className="text-xl font-semibold mb-3 text-gray-800">
                   Upcoming Matches

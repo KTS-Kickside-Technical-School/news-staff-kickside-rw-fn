@@ -44,13 +44,11 @@ const SingleMatch = () => {
   const [isSavingGoal, setIsSavingGoal] = useState(false);
   const [players, setPlayers] = useState<any>();
 
-  const [isEditing, setIsEditing] = useState(false);
-
   const getMatch = async () => {
     try {
       setIsLoading(true);
       const response = await getSingleMatchInfo(matchId);
-      console.log(response);
+
       if (response.status === 200) {
         setMatch(response.data.match);
         setMatchActivities(response.data.matchActivities);

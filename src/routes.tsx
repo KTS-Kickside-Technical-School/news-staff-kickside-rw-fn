@@ -38,6 +38,7 @@ import SingleMatch from './pages/staff/match-center/SingleMatch';
 import PlayerDetails from './component/staff/match-center/PlayerDetails';
 import ViewTournamentsSeasons from './pages/staff/match-center/ViewTournamentsSeasons';
 import ViewSingleSeasonDetails from './pages/staff/match-center/ViewSingleSeasonDetails';
+import StaffViewSingleTeam from './pages/staff/match-center/StaffViewSingleTeam';
 
 const AuthContext = createContext<any>(null);
 
@@ -122,7 +123,10 @@ const AppRouter = () => {
 
               <Route path="tr/match-center" element={<MatchCenter />} />
               <Route path="tr/countries" element={<StaffViewCountries />} />
+
               <Route path="tr/teams" element={<StaffViewTeams />} />
+              <Route path="tr/teams/:id" element={<StaffViewSingleTeam />} />
+
               <Route path="tr/setup" element={<TournamentSetup />} />
               <Route path="tr/setup/player/:id" element={<PlayerDetails />} />
 
