@@ -65,8 +65,17 @@ const ViewSingleSeasonDetails = () => {
       total > 0 ? Math.round((completed / total) * 100) : 0
     }% • ${total} matches`;
   };
+  const calculateProgressNN = (matches: any, teams: number) => {
+    const total = calculateTotalMatches(teams);
+    const completed =
+      matches?.filter((m: any) => m.status === 'finished').length || 0;
+    return total > 0 ? Math.round((completed / total) * 100) : 0;
+  };
 
   const progress = season ? calculateProgress(matches, season.teams.length) : 0;
+  const progressN = season
+    ? calculateProgressNN(matches, season.teams.length)
+    : 0;
 
   if (loading) {
     return (
@@ -107,7 +116,7 @@ const ViewSingleSeasonDetails = () => {
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div
             className="h-2 rounded-full bg-gradient-to-r from-blue-500 to-blue-700"
-            style={{ width: `${progress}%` }}
+            style={{ width: `${progressN}%` }}
           />
         </div>
         <p className="text-xs text-gray-500 mt-1">{progress}</p>

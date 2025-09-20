@@ -147,3 +147,12 @@ export const saveMatchEvent = async (data: any) => {
         return handleError(error)
     }
 }
+
+export const setFeaturedTournamentSeason = async (slug: any) => {
+    try {
+        const response = await axiosInstance.put(`/api/tr/tr-season/set-featured-season/${slug}`);
+        return response.data
+    } catch (error) {
+        return handleError(error)
+    }
+}

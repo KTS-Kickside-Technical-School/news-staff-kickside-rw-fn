@@ -2,7 +2,7 @@ import { FaPlus, FaSearch } from 'react-icons/fa';
 import { FiRefreshCw, FiFilter } from 'react-icons/fi';
 import SEO from '../../../utils/SEO';
 import { useEffect, useState, useCallback } from 'react';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import { ICountry, ITeam } from '../../../utils/types/Tournaments';
 import {
   createNewTeamPlayer,
@@ -102,6 +102,7 @@ const StaffViewSingleTeam = () => {
         team: id,
       });
 
+      console.log(response);
       if (response.status === 201) {
         toast.success('Player added successfully');
         setNewPlayer({
@@ -123,6 +124,7 @@ const StaffViewSingleTeam = () => {
         });
         setShowModal(false);
         fetchPlayers();
+        return;
       } else {
         toast.error(response.message || 'Error adding player');
       }
@@ -199,6 +201,7 @@ const StaffViewSingleTeam = () => {
           description: 'View and manage teams in the Kickside News system.',
         }}
       />
+      <ToastContainer />
 
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
