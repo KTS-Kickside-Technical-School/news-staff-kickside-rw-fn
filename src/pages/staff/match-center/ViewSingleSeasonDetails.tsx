@@ -31,6 +31,7 @@ const ViewSingleSeasonDetails = () => {
     setLoading(true);
     try {
       const response = await getSingleTournamentSeason(slug || '');
+
       if (response.status === 200) {
         setSeason(response.data.season);
         setMatches(response.data.matches);

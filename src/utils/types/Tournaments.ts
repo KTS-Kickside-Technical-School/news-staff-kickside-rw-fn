@@ -60,6 +60,8 @@ export interface ITrMatch {
     awayScore?: number;
     matchDuration?: number;
     matchTime: string;
+    venue?: string;
+    referee?: string
     status?: string;
 }
 

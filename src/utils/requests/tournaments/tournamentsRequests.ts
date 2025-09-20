@@ -92,7 +92,7 @@ export const getSingleMatchInfo = async (matchId: string) => {
     }
 }
 
-export const updateMatch = async (_id: string, data: any) => {
+export const updateMatch = async (_id: any, data: any) => {
     try {
 
         const response = await axiosInstance.put(`/api/tr/match-update/${_id}`, data);
