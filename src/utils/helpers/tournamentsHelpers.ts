@@ -1,40 +1,77 @@
-export const formatTournamentsTime = (time: string | Date) => {
-    if (!time) return '-';
+export const formatTournamentsTime = (
+    time: string | Date,
+    isScheduled: boolean = false
+) => {
+    if (!time) return "-";
+
     const date = new Date(time);
     const now = new Date();
 
-    const isSameDay =
-        date.getFullYear() === now.getFullYear() &&
-        date.getMonth() === now.getMonth() &&
-        date.getDate() === now.getDate();
+    // helper
+    const sameDay = (d1: Date, d2: Date) =>
+        d1.getFullYear() === d2.getFullYear() &&
+        d1.getMonth() === d2.getMonth() &&
+        d1.getDate() === d2.getDate();
 
-    const yesterday = new Date();
+    const isToday = sameDay(date, now);
+
+    const yesterday = new Date(now);
     yesterday.setDate(now.getDate() - 1);
-    const isYesterday =
-        date.getFullYear() === yesterday.getFullYear() &&
-        date.getMonth() === yesterday.getMonth() &&
-        date.getDate() === yesterday.getDate();
+    const isYesterday = sameDay(date, yesterday);
 
-    if (isSameDay) return 'Today';
-    if (isYesterday) return 'Yesterday';
+    const tomorrow = new Date(now);
+    tomorrow.setDate(now.getDate() + 1);
+    const isTomorrow = sameDay(date, tomorrow);
 
-    const weekDay = date.toLocaleDateString('en-US', { weekday: 'long' });
+    const timeOnly = date.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+    });
+
+    if (isScheduled) {
+        if (isToday) return timeOnly; // today → only time
+        if (isTomorrow) return `Tomorrow ${timeOnly}`; // tomorrow → Tomorrow + time
+
+        // This week → weekday + time
+        const weekStart = new Date(now);
+        weekStart.setDate(now.getDate() - now.getDay()); // Sunday
+        const weekEnd = new Date(weekStart);
+        weekEnd.setDate(weekStart.getDate() + 6);
+
+        if (date >= weekStart && date <= weekEnd) {
+            const weekDay = date.toLocaleDateString("en-US", { weekday: "long" });
+            return `${weekDay} ${timeOnly}`;
+        }
+
+        return date.toLocaleString("en-US", {
+            day: "2-digit",
+            month: "short",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true,
+        });
+    }
+
+    if (isToday) return "Today";
+    if (isYesterday) return "Yesterday";
+    if (isTomorrow) return "Tomorrow";
+
     const weekStart = new Date(now);
     weekStart.setDate(now.getDate() - now.getDay());
     const weekEnd = new Date(weekStart);
     weekEnd.setDate(weekStart.getDate() + 6);
 
-    if (date >= weekStart && date <= weekEnd) return weekDay;
+    if (date >= weekStart && date <= weekEnd) {
+        return date.toLocaleDateString("en-US", { weekday: "long" });
+    }
 
-    const options: Intl.DateTimeFormatOptions = {
-        day: '2-digit',
-        month: 'short',
-        hour: '2-digit',
-        minute: '2-digit',
+    return date.toLocaleString("en-US", {
+        day: "2-digit",
+        month: "short",
+        hour: "2-digit",
+        minute: "2-digit",
         hour12: true,
-    };
-
-    return date.toLocaleString('en-US', options);
+    });
 };
 
 export const formatTimeOnly = (dateString: string) => {
@@ -60,38 +97,38 @@ export const calculateAge = (birthdate: string) => {
 
 
 export function formatEventType(eventType: string | undefined): string {
-  if (!eventType) return "";
+    if (!eventType) return "";
 
-  const map: Record<string, string> = {
-    goal: "Goal",
-    own_goal: "Own Goal",
-    penalty_goal: "Penalty Goal",
-    assist: "Assist",
-    shot_on_target: "Shot on Target",
-    shot_off_target: "Shot off Target",
-    penalty_missed: "Penalty Missed",
-    yellow_card: "Yellow Card",
-    red_card: "Red Card",
-    second_yellow_card: "Second Yellow Card",
-    substitution_in: "Substitution In",
-    substitution_out: "Substitution Out",
-    foul_committed: "Foul Committed",
-    foul_suffered: "Foul Suffered",
-    free_kick_awarded: "Free Kick Awarded",
-    penalty_awarded: "Penalty Awarded",
-    kickoff: "Kickoff",
-    half_time: "Half Time",
-    full_time: "Full Time",
-    extra_time_start: "Extra Time Start",
-    extra_time_end: "Extra Time End",
-    penalty_shootout_start: "Penalty Shootout Start",
-    penalty_shootout_end: "Penalty Shootout End",
-    corner_kick: "Corner Kick",
-    throw_in: "Throw In",
-    injury: "Injury",
-    VAR_check: "VAR Check",
-    goal_cancelled: "Goal Cancelled",
-  };
+    const map: Record<string, string> = {
+        goal: "Goal",
+        own_goal: "Own Goal",
+        penalty_goal: "Penalty Goal",
+        assist: "Assist",
+        shot_on_target: "Shot on Target",
+        shot_off_target: "Shot off Target",
+        penalty_missed: "Penalty Missed",
+        yellow_card: "Yellow Card",
+        red_card: "Red Card",
+        second_yellow_card: "Second Yellow Card",
+        substitution_in: "Substitution In",
+        substitution_out: "Substitution Out",
+        foul_committed: "Foul Committed",
+        foul_suffered: "Foul Suffered",
+        free_kick_awarded: "Free Kick Awarded",
+        penalty_awarded: "Penalty Awarded",
+        kickoff: "Kickoff",
+        half_time: "Half Time",
+        full_time: "Full Time",
+        extra_time_start: "Extra Time Start",
+        extra_time_end: "Extra Time End",
+        penalty_shootout_start: "Penalty Shootout Start",
+        penalty_shootout_end: "Penalty Shootout End",
+        corner_kick: "Corner Kick",
+        throw_in: "Throw In",
+        injury: "Injury",
+        VAR_check: "VAR Check",
+        goal_cancelled: "Goal Cancelled",
+    };
 
-  return map[eventType] || eventType.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+    return map[eventType] || eventType.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 }

@@ -4,14 +4,9 @@ import { Readable } from 'stream';
 
 const links = [
   { url: '/', changefreq: 'daily', priority: 1.0 },
-  { url: '/category/Technology', changefreq: 'weekly', priority: 0.8 },
-  { url: '/category/Business', changefreq: 'weekly', priority: 0.8 },
-  { url: '/category/Entertainment', changefreq: 'weekly', priority: 0.8 },
-  { url: '/category/Sports', changefreq: 'weekly', priority: 0.8 },
-  { url: '/contactus', changefreq: 'weekly', priority: 0.8 },
 ];
 
-const hostname = 'https://www.kickside.rw';
+const hostname = 'https://staff.kickside.rw';
 
 const stream = new SitemapStream({ hostname });
 

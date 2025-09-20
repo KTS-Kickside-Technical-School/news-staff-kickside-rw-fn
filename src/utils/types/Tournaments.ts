@@ -37,16 +37,18 @@ export interface ITournament {
 
 export interface ITrSeason {
     _id?: string;
+    slug?: string;
     name: string;
     tournament: any;
     startDate: string;
     endDate: string;
-    teams: string[];
+    teams: any;
     createdAt?: string;
     updatedAt?: string;
     year?: any;
     status?: string;
     isLatest: boolean;
+    isFeatured?: boolean;
 }
 
 export interface ITrMatch {
@@ -58,6 +60,8 @@ export interface ITrMatch {
     awayScore?: number;
     matchDuration?: number;
     matchTime: string;
+    venue?: string;
+    referee?: string
     status?: string;
 }
 

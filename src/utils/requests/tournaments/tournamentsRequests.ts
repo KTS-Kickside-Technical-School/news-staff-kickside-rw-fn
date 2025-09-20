@@ -92,7 +92,7 @@ export const getSingleMatchInfo = async (matchId: string) => {
     }
 }
 
-export const updateMatch = async (_id: string, data: any) => {
+export const updateMatch = async (_id: any, data: any) => {
     try {
 
         const response = await axiosInstance.put(`/api/tr/match-update/${_id}`, data);
@@ -142,6 +142,15 @@ export const getPlayerDetails = async (id: string) => {
 export const saveMatchEvent = async (data: any) => {
     try {
         const response = await axiosInstance.post("/api/tr/new-match-event", data);
+        return response.data
+    } catch (error) {
+        return handleError(error)
+    }
+}
+
+export const setFeaturedTournamentSeason = async (slug: any) => {
+    try {
+        const response = await axiosInstance.put(`/api/tr/tr-season/set-featured-season/${slug}`);
         return response.data
     } catch (error) {
         return handleError(error)

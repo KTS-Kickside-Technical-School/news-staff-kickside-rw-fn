@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import ViewTournamentsSeasons from '../../../component/staff/match-center/ViewTournamentsSeasons';
+import ViewTournamentsSeasons from './ViewTournamentsSeasons';
 import SetupTournament from '../../../component/staff/SetupTournament';
 import SetupTournamentPerYear from '../../../component/staff/SetupTournamentPerYear';
 import SetupTournamentYear from '../../../component/staff/SetupTournamentYear';
